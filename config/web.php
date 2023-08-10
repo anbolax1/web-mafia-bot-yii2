@@ -42,14 +42,16 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
+        'assetManager' => [
+            'linkAssets' => false,
+            'appendTimestamp' => true,
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
