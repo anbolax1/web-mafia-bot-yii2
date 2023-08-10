@@ -39,16 +39,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Home', 'url' => ['/site/index'], 'visible' => false],
+            ['label' => 'Панель игры', 'url' => ['/game/index'], 'visible' => !Yii::$app->user->isGuest && (Yii::$app->user->getIdentity()->isAdmin() || Yii::$app->user->getIdentity()->isHost())],
             ['label' => 'Пользователи', 'url' => ['/user/index'], 'visible' => !Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->isAdmin()],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'About', 'url' => ['/site/about'], 'visible' => false],
+            ['label' => 'Contact', 'url' => ['/site/contact'], 'visible' => false],
             Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/site/login']]
+                ? ['label' => 'Авторизация', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        'Выйти (' . Yii::$app->user->identity->username . ')',
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
