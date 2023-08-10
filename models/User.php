@@ -196,6 +196,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->discordUser->discord_id;
     }
 
+    public function getAvatar()
+    {
+        return $this->discordUser->avatar;
+    }
+
     public function getStatusDescription()
     {
         return self::statuses()[$this->status];

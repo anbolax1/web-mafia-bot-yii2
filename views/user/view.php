@@ -8,6 +8,8 @@ use yii\widgets\DetailView;
 
 $this->title = $model->username;
 \yii\web\YiiAsset::register($this);
+
+$avatarUrl = "https://cdn.discordapp.com/avatars/$model->discordId/$model->avatar.jpg";
 ?>
 <div class="user-view">
 
@@ -17,6 +19,7 @@ $this->title = $model->username;
         <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
     </p>
 
+    <img src="<?= $avatarUrl?>"></img>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
