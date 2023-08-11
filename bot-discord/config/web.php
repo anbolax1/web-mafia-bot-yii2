@@ -14,7 +14,7 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'KzVmz102Wc5_yPddhdPHB2RGZZiQUMru',
+            'cookieValidationKey' => 'PYZ0X_c4LfOmmtJ3YNovZwWapLrcP5Mc',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -42,22 +42,14 @@ $config = [
             ],
         ],
         'db' => $db,
-        'assetManager' => [
-            'linkAssets' => false,
-            'appendTimestamp' => true,
-        ],
+        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        'bot' => [
-            'class' => 'app\components\discord_bot\DiscordBot',
-        ],
-        'DiscordUser' => [
-            'class' => 'app\components\discord_user\DiscordUser',
-        ]
+        */
     ],
     'params' => $params,
 ];

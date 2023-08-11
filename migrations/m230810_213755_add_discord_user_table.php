@@ -26,6 +26,9 @@ class m230810_213755_add_discord_user_table extends Migration
             'discord_id' => $this->string()->notNull()->unique(),
             'username' => $this->string(32)->notNull(),
             'avatar' => $this->string()->notNull(),
+            'access_token' => $this->text(),
+            'refresh_token' => $this->text(),
+            'updated_at' => $this->integer()->notNull()
         ], $tableOptions);
 
         $this->addForeignKey(

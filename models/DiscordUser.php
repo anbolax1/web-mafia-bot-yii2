@@ -12,6 +12,9 @@ use Yii;
  * @property string $discord_id
  * @property string $username
  * @property string $avatar
+ * @property string|null $access_token
+ * @property string|null $refresh_token
+ * @property int $updated_at
  *
  * @property User $user
  */
@@ -31,8 +34,9 @@ class DiscordUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
-            [['discord_id', 'username', 'avatar'], 'required'],
+            [['user_id', 'updated_at'], 'integer'],
+            [['discord_id', 'username', 'avatar', 'updated_at'], 'required'],
+            [['access_token', 'refresh_token'], 'string'],
             [['discord_id', 'avatar'], 'string', 'max' => 255],
             [['username'], 'string', 'max' => 32],
             [['discord_id'], 'unique'],
