@@ -3,11 +3,15 @@
 namespace app\controllers;
 
 use app\models\DiscordUser;
+use app\models\Guild;
 use app\models\User;
 use Yii;
 use yii\base\BaseObject;
 use yii\console\Application;
 use GuzzleHttp\Client;
+use yii\console\ExitCode;
+
+use function RingCentral\Psr7\str;
 
 
 class GameController extends \yii\web\Controller
@@ -29,5 +33,4 @@ class GameController extends \yii\web\Controller
             return $this->redirect('index');
         }
     }
-
 }

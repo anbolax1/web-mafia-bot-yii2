@@ -3,18 +3,78 @@
 namespace app\commands;
 
 use app\components\discord_bot\DiscordBot;
+use app\models\ChannelMember;
+use app\models\Guild;
+use app\models\VoiceChannel;
+use Discord\Parts\Channel\Channel;
 use Yii;
+use yii\base\BaseObject;
 use yii\console\Controller;
 use yii\console\ExitCode;
+use Discord\Discord;
+use Discord\Parts\Channel\Message;
 
 class BotController extends Controller
 {
-    public function actionIndex()
+    public function actionSaveChannelMembers()
     {
         $token = env('BOT_TOKEN');
-        $bot = new DiscordBot($token);
-        $bot->run();
+        $discord = new Discord(
+            [
+                'token' => $token
+            ]
+        );
+        //0. Этот скрипт должен выполняться каждые 5 секунд.
+        //1. Достаём из базы все серверы, к которым подключен бот;
+        //2. Из этого сервера достаём все голосовые каналы;
+        //3. Для каждого голосового канала получаем участников;
+        //4. Сохраняем в базу каналы с участниками
 
-        return $this->render('index');
+        $discord->on('ready',function ($discord) {
+            try {
+                //0. Удаляем все записи из таблиц voice_channel и channel_member
+                VoiceChannel::deleteAll();
+                ChannelMember::deleteAll();
+                $isError = false;
+                $guilds = Guild::find()->all();
+                if(empty($guilds)){
+                    $isError = true;
+                    throw new \Exception("Серверы в базе не найдены!");
+                }
+                foreach ($guilds as $guild) {
+                    $discordGuild = $discord->guilds->get('id', $guild->discord_id);
+                    $voiceChannels = json_decode($guild['voice_channels'], true);
+                    if(empty($voiceChannels)){
+                        $isError = true;
+                        throw new \Exception("Голосовые каналы в базе не найдены!");
+                    }
+                    foreach ($voiceChannels as $voiceChannelId){
+                        $discordChannel = $discordGuild->channels->get('id', $voiceChannelId);
+                        $members = $discordChannel->members;
+                        if(!empty($members)){
+                            file_put_contents('members.log', print_r(json_encode($discordGuild->channels, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
+                            $voiceChannelModel = new VoiceChannel([
+                               'discord_id' => strval($voiceChannelId),
+                               'guild_id' => $guild->id
+                            ]);
+                            $voiceChannelModel->save();
+                            foreach ($members as $memberDiscordId => $member) {
+                                $channelMemberModel = new ChannelMember([
+                                    'discord_id' => strval($member->member->user->id),
+                                    'channel_id' => $voiceChannelModel->id
+                                ]);
+                                $channelMemberModel->save();
+                            }
+                        }
+                    }
+                }
+                if(!$isError){
+                    $discord->close();
+                }
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+                return ExitCode::OK;
+            }
+        });
     }
 }

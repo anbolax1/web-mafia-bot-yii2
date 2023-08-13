@@ -111,4 +111,25 @@ class DiscordBot
             throw new \Exception($e->getMessage());
         }
     }
+
+    public function getBotGuildVoiceChannels($guildId): array
+    {
+        try {
+            $channels = $this->sendRequest('https://discord.com/api/v10/', 'GET', "guilds/$guildId/channels");
+
+            $resultChannels = [];
+            if($channels){
+                foreach ($channels as $channel) {
+                    if($channel['type'] == 2){
+                        $resultChannels[] = $channel['id'];
+                    }
+                }
+                return $resultChannels;
+            } else {
+                throw new \Exception("Не найдены голосовые каналы!");
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

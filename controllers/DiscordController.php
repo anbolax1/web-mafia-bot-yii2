@@ -26,7 +26,7 @@ class DiscordController extends \yii\web\Controller
 
             [$tokens, $discordUser] = Yii::$app->DiscordUser->getDiscordUser($result);
 
-            $discordUserModel = \app\models\DiscordUser::find()->where(['discord_id' => $result['id']])->one();
+            $discordUserModel = \app\models\DiscordUser::find()->where(['discord_id' => $discordUser['id']])->one();
             if(!isset($discordUserModel)){
                 $user = Yii::$app->DiscordUser->createUser($tokens, $discordUser);
             } else {

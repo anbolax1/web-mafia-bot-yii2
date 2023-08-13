@@ -26,6 +26,12 @@ $config = [
             ],
         ],
         'db' => $db,
+        'bot' => [
+            'class' => 'app\components\discord_bot\DiscordBot',
+        ],
+        'DiscordUser' => [
+            'class' => 'app\components\discord_user\DiscordUser',
+        ]
     ],
     'params' => $params,
     /*
