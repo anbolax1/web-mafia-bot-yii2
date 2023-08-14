@@ -22,7 +22,7 @@ class Game
                 'host_id' => $hostUser->getId(),
                 'guild_id' => $this->getGuildId($hostUser),
                 'status' => \app\models\Game::GAME_IN_PROCESS,
-                'start_time' => time()
+                'start_time' => strval(time())
             ]);
             if(!$game->save()){
                 throw new \Exception('Игра не сохранена в базу!');

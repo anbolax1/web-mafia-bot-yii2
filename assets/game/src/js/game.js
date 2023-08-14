@@ -86,11 +86,11 @@ $(document).on("click", "#updateMembersButton", function (e){
         });
 
         jQuery.ajax({
-            url: 'start-game',
+            url: 'game',
             method: 'get',
             data: {
-                members:Object.assign(membersArray),
-                settings:Object.assign(settingArray)
+                // members:Object.assign(membersArray),
+                // settings:Object.assign(settingArray)
             },
             success: function(response) {
             }

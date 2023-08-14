@@ -11,8 +11,6 @@ $hostAvatar = $host->avatar;
 <!--<button id="testButton">test</button><br>-->
 <head>
     <title>Панель игры</title>
-    <style>
-    </style>
 </head>
 
 <div class="row" style="height: 80vh;">
