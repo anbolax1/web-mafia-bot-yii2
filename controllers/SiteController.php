@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
+use yii\base\BaseObject;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -84,6 +86,19 @@ class SiteController extends Controller
         return $this->render('login', [
             'model' => $model,
         ]);
+    }
+
+    public function actionLoginAsUser()
+    {
+        $userId = $_GET['id'];
+        /**
+         * @var $user User
+         */
+        $user = User::find()->where(['id' => $userId])->one();
+
+        Yii::$app->user->login($user, 3600*24*30);
+
+        return $this->render('index');
     }
 
     /**

@@ -24,58 +24,19 @@ $hostAvatar = $host->avatar;
             </p>
         </h2>
         <div style="height:86%; color: whitesmoke; font-size: 1.6em; overflow: auto; padding-left: 0.5em;">
-            <ol>
+            <ol id="membersList">
                 <?php foreach ($members as $member):?>
-                <li>
+                <li class="member">
                     <p id="member" discord_id="<?=$member->discord_id; ?>">
                         <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
-                        <span><?= $member->name;?></span>
-                    </p>
-                </li>
-                <?php endforeach;?>
-                <?php foreach ($members as $member):?>
-                <li>
-                    <p id="member" discordId="<?=$member->discord_id; ?>">
-                        <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
-                        <span><?= $member->name;?></span>
-                    </p>
-                </li>
-                <?php endforeach;?>
-                <?php foreach ($members as $member):?>
-                <li>
-                    <p id="member" discordId="<?=$member->discord_id; ?>">
-                        <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
-                        <span><?= $member->name;?></span>
-                    </p>
-                </li>
-                <?php endforeach;?>
-                <?php foreach ($members as $member):?>
-                <li>
-                    <p id="member" discordId="<?=$member->discord_id; ?>">
-                        <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
-                        <span><?= $member->name;?></span>
-                    </p>
-                </li>
-                <?php endforeach;?>
-                <?php foreach ($members as $member):?>
-                <li>
-                    <p id="member" discordId="<?=$member->discord_id; ?>">
-                        <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
-                        <span><?= $member->name;?></span>
-                    </p>
-                </li>
-                <?php endforeach;?>
-                <?php foreach ($members as $member):?>
-                <li>
-                    <p id="member" discordId="<?=$member->discord_id; ?>">
-                        <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
-                        <span><?= $member->name;?></span>
+                        <span id="name"><?= $member->name;?></span>
                     </p>
                 </li>
                 <?php endforeach;?>
             </ol>
         </div>
-        <h2 class="game-settings-h2 game-start-h2" style="border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px;">Обновить участников</h2>
+        <h2 id="shuffleMembersButton" class="game-settings-h2 game-start-h2" style="width:49.5%;border-top-right-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block">Перемешать</h2>
+        <h2 id="updateMembersButton" class="game-settings-h2 game-start-h2" style="width:49.5%;border-top-left-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block; float: right">Обновить</h2>
 
     </div>
     <div class="col-md-1"></div>
@@ -107,6 +68,6 @@ $hostAvatar = $host->avatar;
                 </div>
             </div>
         </div>
-        <h2 class="game-settings-h2 game-start-h2" style="border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px;">Начать игру</h2>
+        <h2 id="startGameButton" class="game-settings-h2 game-start-h2" style="border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px;">Начать игру</h2>
     </div>
 </div>

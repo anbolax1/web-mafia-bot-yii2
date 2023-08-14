@@ -30,6 +30,24 @@ $this->title = 'Пользователи';
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],*/
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{myButton}',  // the default buttons + your custom button
+                'buttons' => [
+                    'myButton' => function($url, $model, $key) {     // render your custom button
+                        return Html::a(
+                            "<button class='btn btn-success'>Авторизоваться</button>",
+                            Url::to(['site/login-as-user', 'id' => $model->ID]),
+                            [
+                                'id'=>'grid-custom-button',
+                                'data-pjax'=>true,
+                                'action'=>Url::to(['site/login-as-user', 'id' => $model->ID]),
+                                'class'=>'button btn btn-default',
+                            ]
+                        );
+                }
+                ]
+            ]
         ],
          'rowOptions'   => function ($model, $key, $index, $grid) {
              return [

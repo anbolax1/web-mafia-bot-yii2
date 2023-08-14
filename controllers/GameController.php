@@ -57,4 +57,14 @@ class GameController extends \yii\web\Controller
             return $this->render('starting');
         }
     }
+
+    public function actionStartGame()
+    {
+        try {
+            $get = $_GET;
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+            return $this->render('starting');
+        }
+    }
 }

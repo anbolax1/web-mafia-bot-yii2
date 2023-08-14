@@ -40,7 +40,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index'], 'visible' => false],
-            ['label' => 'Панель игры', 'url' => ['/game/starting'], 'visible' => !Yii::$app->user->isGuest && (Yii::$app->user->getIdentity()->isAdmin() || Yii::$app->user->getIdentity()->isHost())],
+            ['label' => 'Панель игры', 'url' => ['/game/starting'], 'visible' => !Yii::$app->user->isGuest && (Yii::$app->user->getIdentity()->isAdmin() || Yii::$app->user->getIdentity()->isHost()) && !empty(Yii::$app->user->getIdentity()->discordId)],
             ['label' => 'Пользователи', 'url' => ['/user/index'], 'visible' => !Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->isAdmin()],
             ['label' => 'About', 'url' => ['/site/about'], 'visible' => false],
             ['label' => 'Contact', 'url' => ['/site/contact'], 'visible' => false],
