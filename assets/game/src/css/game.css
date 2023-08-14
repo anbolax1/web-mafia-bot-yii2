@@ -57,3 +57,19 @@ div#switches > div > div > input {
 .game-start-h2 {
     cursor: pointer;
 }
+
+span#deleteMember {
+    font-size: 0.8em;
+    float: right;
+    margin-right: 1em;
+    border: solid 1px;
+    border-radius: 15px;
+    padding: 0.2%;
+    cursor: pointer;
+    transition: 0.3s linear;
+    user-select: none;
+}
+span#deleteMember:hover {
+    background-color: dimgray;
+    /*background-color: ;*/
+}

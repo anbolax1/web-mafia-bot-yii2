@@ -43,7 +43,21 @@ $( document ).ready(function() {
         })
     })
 
-    $(document).on("click", "#updateMembersButton", function (e){
+    $(document).on("click", "span#deleteMember", function (e){
+        let p = $(this).parent($('p#member'));
+        let li = $(p).parent($("li"));
+        if($(li).hasClass('member')){
+            $(li).removeClass('member');
+            $(p).find($("span#name")).css('opacity', '0.3');
+            $(p).find($("span#deleteMember")).text('Вернуть');
+        } else {
+            $(li).addClass('member');
+            $(p).find($("span#name")).css('opacity', '1');
+            $(p).find($("span#deleteMember")).text('Удалить');
+        }
+    })
+
+$(document).on("click", "#updateMembersButton", function (e){
         //TODO сделать обновление участников без перезагрузки страницы
         location.reload();
     })

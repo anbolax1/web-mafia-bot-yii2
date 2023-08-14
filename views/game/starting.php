@@ -30,6 +30,7 @@ $hostAvatar = $host->avatar;
                     <p id="member" discord_id="<?=$member->discord_id; ?>">
                         <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
                         <span id="name"><?= $member->name;?></span>
+                        <span id="deleteMember">Удалить</span>
                     </p>
                 </li>
                 <?php endforeach;?>
