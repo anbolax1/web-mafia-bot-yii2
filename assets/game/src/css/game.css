@@ -64,10 +64,16 @@ span#deleteMember {
     margin-right: 1em;
     border: solid 1px;
     border-radius: 15px;
-    padding: 0.2%;
+    padding: 1%;
     cursor: pointer;
     transition: 0.3s linear;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    width: 1.5em;
+    height: 1.5em;
 }
 span#deleteMember:hover {
     background-color: dimgray;

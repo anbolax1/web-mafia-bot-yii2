@@ -57,7 +57,10 @@ $config = [
         ],
         'DiscordUser' => [
             'class' => 'app\components\discord_user\DiscordUser',
-        ]
+        ],
+        'Game' => [
+            'class' => 'app\components\game\Game',
+        ],
     ],
     'params' => $params,
 ];

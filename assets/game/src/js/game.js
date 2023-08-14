@@ -32,7 +32,7 @@ $( document ).ready(function() {
             });
             let p = $("<p>", {
                 'id': 'member',
-                'discord_id': item.discord_id
+                'discord_id': item.id
             }).append(img).append(span);
 
             let memberLi = $("<li>", {
@@ -49,11 +49,11 @@ $( document ).ready(function() {
         if($(li).hasClass('member')){
             $(li).removeClass('member');
             $(p).find($("span#name")).css('opacity', '0.3');
-            $(p).find($("span#deleteMember")).text('Вернуть');
+            $(p).find($("span#deleteMember")).text('');
         } else {
             $(li).addClass('member');
             $(p).find($("span#name")).css('opacity', '1');
-            $(p).find($("span#deleteMember")).text('Удалить');
+            $(p).find($("span#deleteMember")).text('X');
         }
     })
 
@@ -75,7 +75,7 @@ $(document).on("click", "#updateMembersButton", function (e){
             let discord_id = $(this).find($("p#member")).attr('discord_id');
             let avatar = $(this).find($("img.avatar")).attr('src');
             let name = $(this).find($('span#name')).text();
-            membersArray[index] = {id: discord_id, name: name, avatar: avatar};
+            membersArray[index] = {discord_id: discord_id, name: name, avatar: avatar};
         });
 
         let inputs = $("input.custom-switch");

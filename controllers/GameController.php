@@ -61,7 +61,40 @@ class GameController extends \yii\web\Controller
     public function actionStartGame()
     {
         try {
+           /* {
+   "members":[
+      {
+         "id":"341896855040425995",
+         "name":"\u0444\u0444\u0444 \u0418\u0432\u0430\u043d \u0412\u044b\u0434\u043e\u0440 \u0438\u043b\u0438 \u0432\u044b\u0434\u0440\u0430\u043b?",
+         "avatar":"https:\/\/cdn.discordapp.com\/avatars\/341896855040425995\/925d3879b1593b0f4bd3b3c00ccf34e1.webp?size=1024"
+      }
+   ],
+   "settings":[
+      {
+         "id":"isRating",
+         "value":"true"
+      },
+      {
+         "id":"foulsCount",
+         "value":"false"
+      },
+      {
+         "id":"withExtraTime",
+         "value":"false"
+      },
+      {
+         "id":"banOnObsceneSpeech",
+         "value":"true"
+      }
+   ]
+} */
             $get = $_GET;
+            $gameMembers = $get['members'];
+            $gameSettings = $get['settings'];
+
+            [$game, $gameMembers] = Yii::$app->Game->startGame($gameSettings, $gameMembers);
+
+            return $this->render('game', ['game' => $game, 'gameMembers' => $gameMembers]);
         } catch (\Exception $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
             return $this->render('starting');
