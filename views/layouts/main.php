@@ -9,7 +9,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
-
+$backgroundImageUrl = \yii\helpers\Url::home(true) . 'images/night_city.jpg';
 AppAsset::register($this);
 
 $this->registerCsrfMetaTags();
@@ -26,7 +26,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100" style="background-size: contain;background-image:url(<?= $backgroundImageUrl;?>);">
 <?php $this->beginBody() ?>
 
 <header id="header">
@@ -40,7 +40,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index'], 'visible' => false],
-            ['label' => 'Панель игры', 'url' => ['/game/index'], 'visible' => !Yii::$app->user->isGuest && (Yii::$app->user->getIdentity()->isAdmin() || Yii::$app->user->getIdentity()->isHost())],
+            ['label' => 'Панель игры', 'url' => ['/game/starting'], 'visible' => !Yii::$app->user->isGuest && (Yii::$app->user->getIdentity()->isAdmin() || Yii::$app->user->getIdentity()->isHost())],
             ['label' => 'Пользователи', 'url' => ['/user/index'], 'visible' => !Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->isAdmin()],
             ['label' => 'About', 'url' => ['/site/about'], 'visible' => false],
             ['label' => 'Contact', 'url' => ['/site/contact'], 'visible' => false],
@@ -60,7 +60,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     ?>
 </header>
 
-<main id="main" class="flex-shrink-0" role="main">
+<main id="main" class="flex-shrink-0" role="main" style="">
     <div class="container">
         <?php if (!empty($this->params['breadcrumbs'])): ?>
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
@@ -70,14 +70,14 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </div>
 </main>
 
-<footer id="footer" class="mt-auto py-3 bg-light">
+<!--<footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+            <div class="col-md-6 text-center text-md-start">&copy; My Company <?/*= date('Y') */?></div>
+            <div class="col-md-6 text-center text-md-end"><?/*= Yii::powered() */?></div>
         </div>
     </div>
-</footer>
+</footer>-->
 
 <?php $this->endBody() ?>
 </body>

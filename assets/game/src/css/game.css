@@ -1,0 +1,58 @@
+ol {
+    list-style-type: decimal-leading-zero;
+}
+.avatar {
+    vertical-align: sub;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    margin-right: 0.1em;
+}
+
+.custom-switch {
+    height: 2.5rem !important;
+    width: calc(4rem + 0.75rem) !important;
+    border-radius: 4rem !important;
+    background-color: transparent !important;
+    border-color: #fff !important;
+    float: none !important;
+}
+
+div#switches {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 86%;
+    color: whitesmoke;
+    flex-direction: column;
+}
+
+div#switches > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2em;
+    width: 80%;
+    border: solid 1px;
+    border-radius: 15px;
+    padding: 2%;
+}
+
+.form-switch {
+    padding-left: 0 !important;
+}
+
+div#switches > div > div > input {
+    margin-left: 0.5em;
+}
+
+.game-settings-h2 {
+    margin: 0;
+    text-align:center;
+    background: rgba(171, 169, 180,0.8);
+    height: 7%;
+}
+
+.game-start-h2 {
+    cursor: pointer;
+}

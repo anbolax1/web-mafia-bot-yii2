@@ -52,17 +52,29 @@ class BotController extends Controller
                         $discordChannel = $discordGuild->channels->get('id', $voiceChannelId);
                         $members = $discordChannel->members;
                         if(!empty($members)){
-                            file_put_contents('members.log', print_r(json_encode($discordGuild->channels, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
                             $voiceChannelModel = new VoiceChannel([
                                'discord_id' => strval($voiceChannelId),
                                'guild_id' => $guild->id
                             ]);
                             $voiceChannelModel->save();
                             foreach ($members as $memberDiscordId => $member) {
+//                                file_put_contents('members.log', print_r(json_encode($member->member->nick, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
+                                $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->nick);
+                                if(empty($name)){
+                                    $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->user->username);
+                                }
+
+                                if($name[2] == '.'){
+                                    $name = trim(substr($name, 3));
+                                }
+//                                file_put_contents('members.log', print_r(json_encode($name, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
                                 $channelMemberModel = new ChannelMember([
                                     'discord_id' => strval($member->member->user->id),
+                                    'name' => $name,
+                                    'avatar' => $member->member->user->avatar,
                                     'channel_id' => $voiceChannelModel->id
                                 ]);
+                                unset($name);
                                 $channelMemberModel->save();
                             }
                         }
