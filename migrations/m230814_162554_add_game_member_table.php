@@ -27,6 +27,7 @@ class m230814_162554_add_game_member_table extends Migration
             'avatar' => $this->string()->notNull()->comment('аватар участника'),
             'slot' => $this->string()->notNull()->comment('слот участника'),
             'role' => $this->string()->notNull()->comment('слот участника'),
+            'result' => $this->text()->null()->comment('результат участника в игре')
         ], $tableOptions);
 
         $this->addForeignKey(

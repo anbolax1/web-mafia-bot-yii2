@@ -5,6 +5,7 @@ namespace app\commands;
 use app\components\discord_bot\DiscordBot;
 use app\models\Guild;
 use Yii;
+use yii\base\BaseObject;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use Discord\Discord;
@@ -33,12 +34,15 @@ class WebBotController extends Controller
                 foreach ($guildsVoiceChannels as $guildId => $guildsVoiceChannel) {
                     $guildModel = Guild::find()->where(['discord_id' => $guildId])->one();
                     if (!empty($guildModel)) {
-                        $guildModel->delete();
+//                        $guildModel->delete();
+                        $guildModel->updateAttributes(['voice_channels' => json_encode($guildsVoiceChannel['channels'], JSON_UNESCAPED_UNICODE)]);
+                    } else {
+                        $guildModel = new Guild([
+                            'discord_id' => strval($guildId),
+                            'voice_channels' => json_encode($guildsVoiceChannel['channels'], JSON_UNESCAPED_UNICODE)
+                        ]);
                     }
-                    $guildModel = new Guild([
-                        'discord_id' => strval($guildId),
-                        'voice_channels' => json_encode($guildsVoiceChannel['channels'], JSON_UNESCAPED_UNICODE)
-                    ]);
+
                     if(!$guildModel->save()){
                         throw new \Exception("Гильдия не сохранена в базу!");
                     }

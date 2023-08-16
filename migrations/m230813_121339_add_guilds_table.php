@@ -25,6 +25,8 @@ class m230813_121339_add_guilds_table extends Migration
             'discord_id' => $this->string()->notNull()->unique(),
             'name' => $this->string()->null(),
             'voice_channels' => $this->text()->null(),
+            'status' => $this->string()->null(),
+            'information' => $this->text()->null(),
         ], $tableOptions);
     }
 
