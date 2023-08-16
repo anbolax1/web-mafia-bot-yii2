@@ -1,6 +1,7 @@
 ol {
     list-style-type: decimal-leading-zero;
 }
+
 .avatar {
     vertical-align: sub;
     width: 1em;
@@ -48,8 +49,8 @@ div#switches > div > div > input {
 
 .game-settings-h2 {
     margin: 0;
-    text-align:center;
-    background: rgba(171, 169, 180,0.8);
+    text-align: center;
+    background: rgba(171, 169, 180, 0.8);
     height: 7%;
     user-select: none;
 }
@@ -75,7 +76,238 @@ span#deleteMember {
     width: 1.5em;
     height: 1.5em;
 }
+
 span#deleteMember:hover {
     background-color: dimgray;
     /*background-color: ;*/
 }
+
+/* game/game */
+
+div#gameBlock {
+    height: 80vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+div#gameInfoBlock {
+    height: 100%;
+    width: 73%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+div#timerBlock {
+    padding: 1em;
+    background: rgba(96, 96, 112, 0.85);
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px black;
+    max-height: 33%;
+    min-height: 33%;
+    position: relative;
+    display: inline-flex;
+    justify-content: space-around;;
+}
+
+div#membersBlock {
+    padding: 1em 0;
+    width: 100%;
+    background: rgba(96, 96, 112, 0.85);
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px black;
+    max-height: 65%;
+    min-height: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: auto;
+}
+
+p.member-row{
+    margin: 0 0 0 1em;
+    display: flex;
+    align-items: center;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+span.member-name > .avatar{
+    margin-left: 0.2em;
+}
+
+span.member-name, span.fouls-list {
+    background: rgba(62, 61, 75, 0.85);
+    border-radius: 10px;
+    margin-left: 0.25em;
+    font-weight: normal !important;
+    padding: 0 0.2em;
+    width: 12em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+}
+
+span.fouls-list {
+    display: flex;
+    justify-content: space-between;
+    width: 8em;
+}
+
+span.fouls-list > span.foul {
+    text-align: center;
+    flex: 1 0 20%;
+}
+
+span.on-vote {
+    background-color: whitesmoke;
+    color: black;
+    opacity: 0.85;
+}
+
+span.delete-member {
+    background: rgba(62, 61, 75, 0.85);
+    border-radius: 10px;
+    margin-left: 0.25em;
+    font-weight: bold !important;
+    padding: 0;
+    width: 1.3em;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-around;
+}
+
+div.modal-content {
+    height: 8em;
+    background: rgba(180, 177, 186, 0.85);
+}
+
+div.modal-body {
+    padding: 0 !important;
+}
+
+div.modal-buttons {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+div.modal-buttons > span {
+    color: whitesmoke;
+    background: rgba(62, 61, 75, 0.85);
+    border-radius: 10px;
+    font-weight: bold;
+    padding: 0 0.2em;
+    width: 12em;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-around;
+}
+
+.opacity03 {
+    opacity: 0.3;
+}
+
+
+
+div#gameRulesBlock {
+    width: 25%;
+    padding: 0;
+    background: rgba(96, 96, 112, 0.85);
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px black;
+    max-height: 100%;
+    min-height: 100%;
+}
+
+div#timer {
+    width: 30%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+div#timerDisplay {
+    height: 70%;
+    background: rgba(62, 61, 75, 0.85);
+    display: flex;
+    border-radius: 10px;
+}
+
+span#timerDisplay {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 5em;
+    color: whitesmoke;
+}
+
+div#timerButtons {
+    height: 30%;
+    color: whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 2vw;
+}
+
+span.timer-button {
+    cursor: pointer;
+    user-select: none;
+}
+
+div#hideGameRulesButtonBlock {
+    position: absolute;
+    right: 0.5em;
+    top: 0;
+}
+
+span#hideGameRulesButton {
+    color: whitesmoke;
+    font-size: 1.5em;
+    cursor: pointer;
+    user-select: none;
+}
+
+div#timerWithButtonsBlock {
+    width: 30%;
+    height: 100%;
+}
+
+div#membersOnVoteBLock {
+    width: 65%;
+    height: 100%;
+    background: rgba(62, 61, 75, 0.85);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+span#membersOnVoteSpan {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 3vw;
+}
+
+span#clearMembersOnVote {
+    text-align: end;
+    color: whitesmoke;
+    cursor: pointer;
+    user-select: none;
+    padding-right: 0.5em;
+    font-weight: bold;
+}
+

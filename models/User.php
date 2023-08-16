@@ -222,12 +222,35 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Gets query for [[DiscordUsers]].
+     * Gets query for [[DiscordUser]].
      *
      * @return \yii\db\ActiveQuery
      */
     public function getDiscordUser()
     {
         return $this->hasOne(DiscordUser::class, ['user_id' => 'id']);
+    }
+
+    public function getGames()
+    {
+        return $this->hasMany(Game::class, ['host_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Games]].
+     *
+     * @return \yii\db\ActiveQuery | false
+     */
+    public function getGameInProcess()
+    {
+        $games = $this->hasMany(Game::class, ['host_id' => 'id'])->all();
+        if (!empty($games)) {
+            foreach ($games as $game) {
+                if($game->status == Game::GAME_IN_PROCESS){
+                    return $game;
+                }
+            }
+        }
+        return false;
     }
 }

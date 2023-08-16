@@ -23,7 +23,8 @@
         "ext-json": "*",
         "team-reflex/discord-php": "^7.3",
         "guzzlehttp/guzzle": "^7.7",
-      "ext-mbstring": "*"
+      "ext-mbstring": "*",
+        "npm-asset/bootstrap-icons": "^1.10"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

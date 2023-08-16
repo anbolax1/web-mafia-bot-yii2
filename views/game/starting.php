@@ -49,9 +49,9 @@ $hostAvatar = $host->avatar;
                 </div>
             </div>
             <div>
-                <div class="d-inline-block" style="font-size: 2em">КОЛ-ВО ФОЛОВ</div>
+                <div class="d-inline-block" style="font-size: 2em">БОЛЬШЕ ФОЛОВ</div>
                 <div class="form-check form-switch d-inline-block" style="">
-                    <input class="form-check-input custom-switch" type="checkbox" id="foulsCount" >
+                    <input class="form-check-input custom-switch" type="checkbox" id="moreFouls" >
                 </div>
             </div>
             <div>

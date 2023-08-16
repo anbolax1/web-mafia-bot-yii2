@@ -12,7 +12,7 @@ use Yii;
 
 class Game
 {
-    public function startGame($settings, $gameMembers)
+    public function createGame($settings, $gameMembers)
     {
         try {
             $transaction = Yii::$app->db->beginTransaction();
@@ -71,7 +71,8 @@ class Game
                 }
             }
             $transaction->commit();
-            return [$game, $gameMembers];
+//            return [$game, $gameMembers];
+            return $game;
         } catch (\Exception $e) {
             $transaction->rollBack();
             throw new \Exception($e->getMessage());

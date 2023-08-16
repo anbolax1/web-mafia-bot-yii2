@@ -9,6 +9,12 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+
+// подключаем
+use app\assets\bootstrap\BootstrapIconsAsset;
+// регистрируем
+BootstrapIconsAsset::register($this);
+
 $backgroundImageUrl = \yii\helpers\Url::home(true) . 'images/night_city.jpg';
 AppAsset::register($this);
 

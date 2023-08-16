@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\ChannelMember;
+use app\models\GameMember;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -31,7 +32,7 @@ class GameController extends Controller
     public function actionIndex(): string
     {
 //        Yii::$app->bot->sendMessage(1046294793157885996, 'Hello!');
-        return $this->render('game');
+        return $this->render('index');
     }
 
     public function actionSend()
@@ -50,6 +51,11 @@ class GameController extends Controller
     public function actionStarting()
     {
         try {
+            $game = Yii::$app->user->getIdentity()->getGameInProcess();
+            if(!empty($game)){
+                return $this->redirect(['game', 'game' => $game]);
+            }
+
             $hostUser = Yii::$app->user->getIdentity();
             $hostDiscordId = $hostUser->discordId;
             $hostChannelMember = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one();
@@ -69,25 +75,45 @@ class GameController extends Controller
         }
     }
 
-    public function actionGame(): string
+    public function actionCreateGame()
     {
         try {
-            /*$post = $_POST;
+            $post = $_POST;
             $gameMembers = $post['members'];
             $gameSettings = $post['settings'];
 
-            [$game, $gameMembers] = Yii::$app->Game->startGame($gameSettings, $gameMembers);*/
+            $game = Yii::$app->Game->createGame($gameSettings, $gameMembers);
 
-            return $this->render('/game/index');
+            return $this->render('game', ['game' => $game]);
+//            return $this->render('/game/game');
         } catch (\Exception $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
             return $this->render('starting');
         }
     }
 
-    public function actionTest()
+    public function actionGame(): string
     {
+        try {
+            $game = Yii::$app->user->getIdentity()->getGameInProcess();
+            return $this->render('game', ['game' => $game]);
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+            return $this->render('starting');
+        }
+    }
 
-        $this->render('/game/index');
+    public function actionDeleteMemberFromGame()
+    {
+        try {
+            $post = $_POST;
+            $gameMemberModel = GameMember::find()->where(['game_id' => $post['gameId'], 'discord_id' => $post['discordId']])->one();
+            if(empty($gameMemberModel)){
+                throw  new \Exception("Участник игры в базе не найден!");
+            }
+            //TODO
+        } catch (\Exception $e) {
+            return json_encode(['message' => $e->getMessage()]);
+        }
     }
 }
