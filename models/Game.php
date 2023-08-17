@@ -25,10 +25,21 @@ class Game extends \yii\db\ActiveRecord
     const GAME_FINISHED = 'game_finished';
     const GAME_CANCELED = 'game_canceled';
 
+
     const ROLE_MAF = 'maf';
     const ROLE_DON = 'don';
     const ROLE_SHERIFF = 'sheriff';
     const ROLE_MIR = 'mir';
+
+    const REASON_VOTED = 'voted';
+    const REASON_KILLED = 'killed';
+    const REASON_FOULED = 'fouled';
+    const REASON_TECH = 'tech_reason';
+
+    const KILLED_FIRST = 'killed_first';
+
+    const THE_BEST_MOVE = 'the_best_move';
+
     /**
      * {@inheritdoc}
      */
@@ -66,6 +77,19 @@ class Game extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getGameActionDescription($reason): string
+    {
+        $reasonDescriptions = [
+            self::REASON_VOTED => 'Заголосован',
+            self::REASON_KILLED => 'Убит',
+            self::REASON_FOULED => 'Поднят по фолам',
+            self::REASON_TECH => 'Поднят по тех. причинам',
+            self::KILLED_FIRST => 'Первый убиенный',
+            self::THE_BEST_MOVE => 'Лучший ход',
+        ];
+        return $reasonDescriptions[$reason];
+    }
+
     /**
      * Gets query for [[GameMembers]].
      *
@@ -94,5 +118,15 @@ class Game extends \yii\db\ActiveRecord
     public function getHost()
     {
         return $this->hasOne(User::class, ['id' => 'host_id']);
+    }
+
+    /**
+     * Gets query for [[GameHistoriy]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGameHistory()
+    {
+        return $this->hasMany(GameHistory::class, ['game_id' => 'id']);
     }
 }

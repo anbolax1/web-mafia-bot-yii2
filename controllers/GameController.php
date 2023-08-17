@@ -3,7 +3,10 @@
 namespace app\controllers;
 
 use app\models\ChannelMember;
+use app\models\Game;
+use app\models\GameHistory;
 use app\models\GameMember;
+use yii\base\BaseObject;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -92,11 +95,15 @@ class GameController extends Controller
         }
     }
 
-    public function actionGame(): string
+    public function actionGame()
     {
         try {
             $game = Yii::$app->user->getIdentity()->getGameInProcess();
-            return $this->render('game', ['game' => $game]);
+            if(!empty($game)){
+                return $this->render('game', ['game' => $game]);
+            } else {
+                return $this->redirect('starting');
+            }
         } catch (\Exception $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
             return $this->render('starting');
@@ -107,13 +114,123 @@ class GameController extends Controller
     {
         try {
             $post = $_POST;
-            $gameMemberModel = GameMember::find()->where(['game_id' => $post['gameId'], 'discord_id' => $post['discordId']])->one();
+            $gameMemberModel = GameMember::find()->where(['game_id' => $post['gameId'], 'discord_id' => $post['memberDiscordId']])->one();
             if(empty($gameMemberModel)){
                 throw  new \Exception("Участник игры в базе не найден!");
             }
-            //TODO
+            $gameMember = GameMember::find()->where(['game_id' => $post['gameId'], 'discord_id' => $post['memberDiscordId']])->one();
+            if(empty($gameMember)){
+                throw new \Exception("В игре (id = {$post['gameId']}) не найден участник (discord_id = {$post['memberDiscordId']})");
+            }
+            $gameMemberResult = json_decode($gameMember->result, true);
+
+            if($post['toDelete'] == 'true'){
+                $gameHistory = new GameHistory([
+                   'game_id' => $post['gameId'],
+                   'member_discord_id' => strval($post['memberDiscordId']),
+//                   'description' => Game::getGameActionDescription($post['deleteReason']),
+                   'description' => $post['deleteReason'],
+                   'time' => strval(time())
+                ]);
+                if(!$gameHistory->save()){
+                    throw new \Exception("В историю игры (id = {$post['gameId']} не записано удаление игрока {$post['memberDiscordId']}");
+                }
+
+                $gameMemberResult['is_deleted'] = 'true';
+                $gameMemberResult['delete_reason'] = $post['deleteReason'];
+                $gameMemberResult['fouls_count'] = $post['foulsCount'];
+                $gameMemberResult['killed_first'] = $post['killedFirst'];
+            } else {
+                GameHistory::deleteAll(['game_id' => $post['gameId'], 'member_discord_id' => $post['memberDiscordId']]);
+//                unset($gameMemberResult['is_deleted'], $gameMemberResult['delete_reason'], $gameMemberResult['fouls_count'], $gameMemberResult['killed_first']);
+                $gameMemberResult = [];
+            }
+            $gameMember->updateAttributes(['result' => json_encode($gameMemberResult, JSON_UNESCAPED_UNICODE)]);
+
         } catch (\Exception $e) {
             return json_encode(['message' => $e->getMessage()]);
+        }
+    }
+
+    public function actionWriteTheBestMove()
+    {
+        try {
+            $post = $_POST;
+            $gameMembers = GameMember::find()->where(['game_id' => $post['gameId']])->all();
+            if(empty($gameMembers)){
+                throw  new \Exception("Участники игры (id = {$post['gameId']}) не найдены в базе!");
+            }
+            $theBestMove = [
+                'slots' => [],
+                'rightCount' => 0
+            ];
+            foreach ($gameMembers as $gameMember) {
+                if(in_array($gameMember->role, ['maf', 'don']) && in_array($gameMember->slot, $post['theBestMoveSlots'])){
+                    array_push($theBestMove['slots'], $gameMember->slot);
+                    $theBestMove['rightCount']++;
+                }
+            }
+
+            $gameMemberModel = GameMember::find()->where(['game_id' => $post['gameId'], 'discord_id' => $post['memberDiscordId']])->one();
+            if(empty($gameMemberModel)){
+                throw  new \Exception("Участник игры в базе не найден!");
+            }
+
+            $gameMemberResult = json_decode($gameMemberModel->result, true);
+            $gameMemberResult['the_best_move'] = [
+                'slots' => $post['theBestMoveSlots'],
+                'right_slots' => $theBestMove['slots'],
+                'right_count' => $theBestMove['rightCount']
+            ];
+
+            $gameMemberModel->updateAttributes(['result' => json_encode($gameMemberResult, JSON_UNESCAPED_UNICODE)]);
+
+            $gameHistory = new GameHistory([
+                'game_id' => $post['gameId'],
+                'member_discord_id' => strval($post['memberDiscordId']),
+                'description' => Game::THE_BEST_MOVE,
+                'time' => strval(time())
+            ]);
+            if(!$gameHistory->save()){
+                throw new \Exception("В историю игры (id = {$post['gameId']} не записан ЛХ игрока {$post['memberDiscordId']}");
+            }
+        } catch (\Exception $e) {
+            return json_encode(['message' => $e->getMessage()]);
+        }
+    }
+
+    public function actionFinishGame()
+    {
+        try {
+            $post = $_POST;
+
+            $game = Game::find()->where(['id' => $post['gameId']])->one();
+            if(empty($game)){
+                throw new \Exception("Игра (id = {$post['gameId']}) не найдена в базе!");
+            }
+            $gameStatus = $post['finishType'] == 'canceled' ? Game::GAME_CANCELED : Game::GAME_FINISHED;
+            $winRole = $post['finishType'] == 'canceled' ? '' : $post['finishType'];
+
+            $game->updateAttributes(['status' => $gameStatus,'end_time' => strval(time()), 'win_role' => $winRole]);
+
+            if($post['finishType'] == 'canceled') {
+                return $this->render('starting');
+            } else {
+                return $this->render('finish', ['game' => $game]);
+            }
+        } catch (\Exception $e) {
+            return json_encode(['message' => $e->getMessage()]);
+        }
+    }
+
+    public function actionFinish()
+    {
+        try {
+            $game = Yii::$app->user->getIdentity()->getFinishedGame();
+            return $this->render('finish', ['game' => $game]);
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+            return $this->render('starting');
         }
     }
 }

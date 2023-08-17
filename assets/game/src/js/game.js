@@ -1,4 +1,28 @@
 $( document ).ready(function() {
+    var gameInterval;
+    var gameTimeSpan = $("h2#gameTime>span");
+    var gameSeconds = $("div#techFields>#gameSeconds").text();
+    gameInterval = setInterval(function () {
+        gameSeconds++;
+        var h = Math.floor(gameSeconds / 3600);
+        var m = Math.floor(gameSeconds % 3600 / 60);
+        var s = Math.floor(gameSeconds % 3600 % 60);
+
+        h = h.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+        });
+        m = m.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+        });
+        s = s.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+        });
+        $(gameTimeSpan).text(h + ':' + m + ':' + s);
+    }, 1000);
+
     $(document).on("click", "#shuffleMembersButton", function (e){
         let membersList = $("ol#membersList");
         let membersArray = [];
@@ -141,11 +165,11 @@ $( document ).ready(function() {
         if(gameRulesBlock.hasClass('hidden')){
             $("span#hideGameRulesButton").text('>');
             $("div#gameInfoBlock").css('width', '73%').css('transition', '0.3s');
-            gameRulesBlock.css('transition', '0.3s').css('width', '25%').css('opacity', '1').removeClass('hidden');
+            gameRulesBlock.css('transition', '0.3s').css('width', '25%').css('opacity', '1').removeClass('hidden').show();
         } else {
             $("span#hideGameRulesButton").text('<');
             $("div#gameInfoBlock").css('width', '100%').css('transition', '0.3s');
-            gameRulesBlock.css('transition', '0.3s').css('width', '0').css('opacity', '').addClass('hidden');
+            gameRulesBlock.css('transition', '0.3s').css('width', '0').css('opacity', '').addClass('hidden').hide();
 
         }
     })
@@ -199,6 +223,14 @@ $( document ).ready(function() {
         }
     })
 
+    $(document).on("click", "span#plus30, span.the-best-move-member", function (e){
+        if($(e.currentTarget).hasClass('on-vote')){
+            $(e.currentTarget).removeClass('on-vote');
+        } else {
+            $(e.currentTarget).addClass('on-vote');
+        }
+    })
+
     $(document).on("click", "span.delete-member", function (e){
         let modal = $("#deleteMemberReasonModal");
 
@@ -214,15 +246,45 @@ $( document ).ready(function() {
         $("div#techFieldsModal>span#memberDiscordId").text(memberDiscordId);
         $("div#techFieldsModal>span#foulsCount").text(foulsCount);
 
+        let killedMembersCount = $(`p.member-row[reason="killed"]`).length;
+        if(killedMembersCount === 0) {
+            $(modal).find($("span#killed"))
+                .attr('data-bs-target', '#theBestMoveModal')
+                .attr('data-bs-toggle', 'modal')
+                .attr('data-bs-dismiss', 'modal');
+        } else {
+            $(modal).find($("span#killed"))
+                .removeAttr('data-bs-target')
+                .removeAttr('data-bs-toggle')
+                .removeAttr('data-bs-dismiss');
+        }
+
         let memberRow = $(`p.member-row[discord_id="${memberDiscordId}"]`);
         if($(memberRow).hasClass('opacity03')){
             $(memberRow).removeClass('opacity03');
+            $(memberRow).removeAttr('reason');
+
+            jQuery.ajax({
+                url: 'delete-member-from-game',
+                method: 'post',
+                data: {
+                    gameId:gameId,
+                    memberDiscordId:memberDiscordId,
+                    toDelete:'false',
+                },
+                success: function(response) {
+                    let result = response;
+                    if(typeof result['message'] != 'undefined'){
+                        alert(result['message']);
+                    }
+                }
+            });
         } else {
             modal.modal('show');
         }
     })
 
-    $(document).on("click", "div.modal-buttons > span", function (e){
+    $(document).on("click", "div.modal-buttons#deleteMemberReasonModal > span", function (e){
         let modal = $("#deleteMemberReasonModal");
 
         let deleteReason = $(e.currentTarget).attr('id');
@@ -237,14 +299,26 @@ $( document ).ready(function() {
 
         let memberRow = $(`p.member-row[discord_id="${memberDiscordId}"]`);
         let toDelete;
+
+        let killedFirst = false;
+        let killedMembersCount = $(`p.member-row[reason="killed"]`).length;
+        if(killedMembersCount === 0 && deleteReason === 'killed') {
+            killedFirst = true;
+        }
+
+        $(memberRow).attr('reason', deleteReason);
+
+        //если уже удалён, возвращаем
         if($(memberRow).hasClass('opacity03')){
             $(memberRow).removeClass('opacity03');
             toDelete = false;
         } else {
             $(memberRow).addClass('opacity03');
             toDelete = true;
+            $(memberRow).attr('reason', deleteReason);
         }
         modal.modal('hide');
+
 
         jQuery.ajax({
             url: 'delete-member-from-game',
@@ -255,12 +329,75 @@ $( document ).ready(function() {
                 foulsCount:foulsCount,
                 deleteReason:deleteReason,
                 toDelete:toDelete,
+                killedFirst:killedFirst,
             },
             success: function(response) {
                 let result = response;
                 if(typeof result['message'] != 'undefined'){
                     alert(result['message']);
                 }
+            }
+        });
+    })
+
+    $(document).on("click", "span#sendTheBestMove", function (e){
+        let modal = $("#deleteMemberReasonModal");
+        let theBestMoveModal = $("#theBestMoveModal");
+
+        let gameId = $(modal).find($("span#gameId")).text();
+        let memberDiscordId = $(modal).find($("span#memberDiscordId")).text();
+
+        theBestMoveModal.modal('hide');
+
+        let theBestMoveSlots = [];
+
+        $("span.the-best-move-member.on-vote").each(function (index) {
+            theBestMoveSlots.push($(this).attr('id'));
+        });
+
+        $("span.the-best-move-member").removeClass('on-vote');
+        jQuery.ajax({
+            url: 'write-the-best-move',
+            method: 'post',
+            data: {
+                gameId:gameId,
+                memberDiscordId:memberDiscordId,
+                theBestMoveSlots:Object.assign(theBestMoveSlots),
+            },
+            success: function(response) {
+                let result = response;
+                if(typeof result['message'] != 'undefined'){
+                    alert(result['message']);
+                }
+            }
+        });
+    })
+
+    $(document).on("click", "h2#finishGameButton", function (e){
+        let modal = $("#finishGameModal");
+        modal.modal('show');
+    })
+
+    $(document).on("click", "span.finish-game", function (e){
+        let modal = $("#finishGameModal");
+        let gameId = $("div#techFields>span#gameId").text();
+        let finishType = $(e.currentTarget).attr('id');
+
+        jQuery.ajax({
+            url: 'finish-game',
+            method: 'post',
+            data: {
+                gameId:gameId,
+                finishType:finishType,
+            },
+            success: function(response) {
+                let result = response;
+                if(typeof result['message'] != 'undefined'){
+                    alert(result['message']);
+                    return;
+                }
+                let page = finishType === 'canceled' ? 'starting' : 'finish';
+                window.location.replace(page);
             }
         });
     })

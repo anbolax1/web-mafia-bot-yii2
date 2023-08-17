@@ -5,27 +5,24 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "game_member".
+ * This is the model class for table "game_history".
  *
  * @property int $id
  * @property int $game_id id игры из таблицы game
- * @property string $discord_id discord_id участника
- * @property string $name имя участника
- * @property string $avatar аватар участника
- * @property string $slot слот участника
- * @property string $role слот участника
- * @property string|null $result результат участника в игре
+ * @property string|null $member_discord_id discord_id участника
+ * @property string $description имя участника
+ * @property string $time время
  *
  * @property Game $game
  */
-class GameMember extends \yii\db\ActiveRecord
+class GameHistory extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'game_member';
+        return 'game_history';
     }
 
     /**
@@ -34,10 +31,9 @@ class GameMember extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['game_id', 'discord_id', 'name', 'avatar', 'slot', 'role'], 'required'],
+            [['game_id', 'description', 'time'], 'required'],
             [['game_id'], 'integer'],
-            [['result'], 'string'],
-            [['discord_id', 'name', 'avatar', 'slot', 'role'], 'string', 'max' => 255],
+            [['member_discord_id', 'description', 'time'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
         ];
     }
@@ -50,11 +46,9 @@ class GameMember extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'game_id' => 'Game ID',
-            'discord_id' => 'Discord ID',
-            'name' => 'Name',
-            'avatar' => 'Avatar',
-            'slot' => 'Slot',
-            'role' => 'Role',
+            'member_discord_id' => 'Member Discord ID',
+            'description' => 'Description',
+            'time' => 'Time',
         ];
     }
 

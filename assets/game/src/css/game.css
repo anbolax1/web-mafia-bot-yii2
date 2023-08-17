@@ -136,6 +136,17 @@ span.member-name > .avatar{
     margin-left: 0.2em;
 }
 
+span#plus30 {
+    background: rgba(62, 61, 75, 0.85);
+    border-radius: 10px;
+    margin-left: 0.2em;
+    width: 2.5em;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+
 span.member-name, span.fouls-list {
     background: rgba(62, 61, 75, 0.85);
     border-radius: 10px;
@@ -164,8 +175,8 @@ span.fouls-list > span.foul {
 }
 
 span.on-vote {
-    background-color: whitesmoke;
-    color: black;
+    background-color: whitesmoke !important;
+    color: black !important;
     opacity: 0.85;
 }
 
@@ -182,6 +193,7 @@ span.delete-member {
     justify-content: space-around;
 }
 
+/* модальное окно выбора причины удаления игрока */
 div.modal-content {
     height: 8em;
     background: rgba(180, 177, 186, 0.85);
@@ -216,8 +228,52 @@ div.modal-buttons > span {
 .opacity03 {
     opacity: 0.3;
 }
+/* _________ */
 
 
+/* модальное окно лучшего хода */
+div#theBestMoveModalHeader {
+    display: flex;
+    justify-content: space-around;
+    height: 1em;
+}
+
+span#theBestMoveMembersList {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-content: space-around;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+span#theBestMoveMembersList > span.the-best-move-member {
+    width: 1.5em;
+    height: 1.5em;
+    color: whitesmoke;
+    background: rgba(62, 61, 75, 0.85);
+    border-radius: 10px;
+    font-weight: normal !important;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 1.2em;
+}
+
+div#theBestMoveModalFooter {
+    padding: 0;
+}
+
+div#theBestMoveModalFooter > span#sendTheBestMove {
+    background: rgba(62, 61, 75, 0.85);
+    cursor: pointer;
+    user-select: none;
+    border-radius: 10px;
+    color: whitesmoke;
+}
+/* _________ */
 
 div#gameRulesBlock {
     width: 25%;
@@ -227,6 +283,10 @@ div#gameRulesBlock {
     box-shadow: 5px 5px 5px black;
     max-height: 100%;
     min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
 }
 
 div#timer {
@@ -256,7 +316,7 @@ div#timerButtons {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    font-size: 2vw;
+    font-size: 1.5vw;
 }
 
 span.timer-button {
@@ -309,5 +369,44 @@ span#clearMembersOnVote {
     user-select: none;
     padding-right: 0.5em;
     font-weight: bold;
+}
+
+
+/* Блок с правилами*/
+#gameTime {
+    margin: 0;
+    text-align: center;
+    background: rgba(171, 169, 180, 0.8);
+    height: 5.5vh;
+    user-select: none;
+    font-size: 2vw;
+}
+div#deleteReasons, div#gameNotes, div#roleNote {
+    background: rgba(62, 61, 75, 0.85);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    margin: 1vw 1vw;
+    width: auto;
+    height: auto;
+    color: whitesmoke;
+    font-size: 1vw;
+}
+
+div#deleteReasons > p, div#gameNotes > p, div#roleNote > p {
+    text-align: center;
+    font-weight: bold;
+}
+
+#finishGameButton {
+    margin: 0;
+    text-align: center;
+    background: rgba(171, 169, 180, 0.8);
+    height: 5.5vh;
+    font-size: 2vw;
+    user-select: none;
+    cursor: pointer;
+    border-bottom-left-radius: 15px 15px;
+    border-bottom-right-radius: 15px 15px;
 }
 

@@ -236,17 +236,25 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Game::class, ['host_id' => 'id']);
     }
 
-    /**
-     * Gets query for [[Games]].
-     *
-     * @return \yii\db\ActiveQuery | false
-     */
     public function getGameInProcess()
     {
         $games = $this->hasMany(Game::class, ['host_id' => 'id'])->all();
         if (!empty($games)) {
             foreach ($games as $game) {
                 if($game->status == Game::GAME_IN_PROCESS){
+                    return $game;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getFinishedGame()
+    {
+        $games = $this->hasMany(Game::class, ['host_id' => 'id'])->all();
+        if (!empty($games)) {
+            foreach (array_reverse($games) as $game) {
+                if($game->status == Game::GAME_FINISHED){
                     return $game;
                 }
             }
