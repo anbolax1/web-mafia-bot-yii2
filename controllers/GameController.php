@@ -203,11 +203,19 @@ class GameController extends Controller
     {
         try {
             $post = $_POST;
-
             $game = Game::find()->where(['id' => $post['gameId']])->one();
             if(empty($game)){
                 throw new \Exception("Игра (id = {$post['gameId']}) не найдена в базе!");
             }
+            $gameSettings = Yii::$app->Game->getGameSettings($game);
+
+            if($gameSettings['isRating'] == 'true'){
+                $result = Yii::$app->Game->writeRating($game);
+                if(!$result){
+                    throw new \Exception("Произошла ошибка при записи в БД рейтинга");
+                }
+            }
+
             $gameStatus = $post['finishType'] == 'canceled' ? Game::GAME_CANCELED : Game::GAME_FINISHED;
             $winRole = $post['finishType'] == 'canceled' ? '' : $post['finishType'];
 

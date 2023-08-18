@@ -129,4 +129,14 @@ class Game extends \yii\db\ActiveRecord
     {
         return $this->hasMany(GameHistory::class, ['game_id' => 'id']);
     }
+
+    /**
+     * Gets query for [[MemberRatingHistory]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMemberRatingHistory()
+    {
+        return $this->hasMany(MemberRatingHistory::class, ['game_id' => 'id']);
+    }
 }

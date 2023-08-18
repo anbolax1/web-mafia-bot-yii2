@@ -67,4 +67,18 @@ class GameMember extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Game::class, ['id' => 'game_id']);
     }
+
+    public static function getMemberGames($gameMember, $guildId = null)
+    {
+        $gameIds = array_column(self::find()
+                                    ->select(['game_id'])
+                                    ->leftJoin('game', '`game`.`id` = `game_member`.`game_id`')
+                                    ->where(['discord_id' => $gameMember->discord_id, ])
+                                    ->andFilterWhere(['game.guild_id' => $guildId])
+//                                    ->andWhere(['<>', 'game_id', $gameMember->game_id])
+                                    ->asArray()->all(), 'game_id');
+        $games = Game::find()->where(['id' => $gameIds, 'status' => Game::GAME_FINISHED])->all();
+
+        return array_reverse($games);
+    }
 }

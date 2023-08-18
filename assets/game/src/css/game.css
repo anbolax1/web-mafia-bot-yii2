@@ -379,7 +379,7 @@ span#clearMembersOnVote {
     background: rgba(171, 169, 180, 0.8);
     height: 5.5vh;
     user-select: none;
-    font-size: 2vw;
+    font-size: 1.7vmax;
 }
 div#deleteReasons, div#gameNotes, div#roleNote {
     background: rgba(62, 61, 75, 0.85);
