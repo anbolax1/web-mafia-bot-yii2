@@ -223,6 +223,7 @@ div.modal-buttons > span {
     user-select: none;
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 .opacity03 {
@@ -409,4 +410,109 @@ div#deleteReasons > p, div#gameNotes > p, div#roleNote > p {
     border-bottom-left-radius: 15px 15px;
     border-bottom-right-radius: 15px 15px;
 }
+
+/* страница финиша игры */
+div#finishGameBlock {
+    display: flex;
+    justify-content: space-between;
+}
+
+div#memberRolesBlock {
+    padding:0;
+    background: rgba(96, 96, 112 ,0.85);
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px black;
+    max-height: 100%;
+    width: 45%;
+}
+
+div#memberRoles {
+    color: whitesmoke;
+    font-size: 1.6em;
+    overflow: auto;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    width: 100%;
+    height: 93%;
+}
+
+div#gameHistoryBlock {
+    padding:0;
+    background: rgba(96, 96, 112 ,0.85);
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px black;
+    width: 45%;
+}
+
+div#gameHistory {
+    /*display: flex;*/
+    justify-content: center;
+    align-items: center;
+    height: 93%;
+    color: whitesmoke;
+    flex-direction: column;
+}
+
+h2#startNewGameButton {
+    border-bottom-left-radius: 15px 15px;
+    border-bottom-right-radius: 15px 15px;
+
+    margin: 0;
+    text-align: center;
+    background: rgba(171, 169, 180, 0.8);
+    height: 7%;
+    user-select: none;
+
+    cursor: pointer;
+}
+
+span.rating-green {
+    color: green;
+}
+
+span.rating-red {
+    color: red;
+}
+
+p.finish-member-row {
+    margin: 0 0 0 1em;
+    display: flex;
+    align-items: center;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+span.finish-member-name {
+    background: rgba(62, 61, 75, 0.85);
+    border-radius: 10px;
+    margin-left: 0.25em;
+    font-weight: normal !important;
+    padding: 0 0.2em;
+    width: 50%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+}
+
+span.member-change-rating {
+    width: 10%;
+}
+
+#startGameSpinner {
+    --bs-spinner-width: 2rem !important;
+    --bs-spinner-height: 2rem !important;
+    --bs-spinner-border-width: 0.2em;
+}
+
+#finishGameSpinner {
+    --bs-spinner-width: 1rem !important;
+    --bs-spinner-height: 1rem !important;
+    --bs-spinner-border-width: 0.2em;
+}
+
 

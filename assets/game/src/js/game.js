@@ -87,6 +87,7 @@ $( document ).ready(function() {
     })
 
     $(document).on("click", "#startGameButton", function (e){
+        $("#startGameSpinner").show();
         let membersArray = [];
         let settingArray = [];
         let members = $("li.member");
@@ -113,6 +114,7 @@ $( document ).ready(function() {
                 settings:Object.assign(settingArray)
             },
             success: function(response) {
+                $("#startGameSpinner").hide();
                 window.location.replace("game");
             }
         });
@@ -379,6 +381,7 @@ $( document ).ready(function() {
     })
 
     $(document).on("click", "span.finish-game", function (e){
+        $(e.currentTarget).find("#finishGameSpinner").show();
         let modal = $("#finishGameModal");
         let gameId = $("div#techFields>span#gameId").text();
         let finishType = $(e.currentTarget).attr('id');
@@ -397,9 +400,15 @@ $( document ).ready(function() {
                     return;
                 }
                 let page = finishType === 'canceled' ? 'starting' : 'finish';
+                $(e.currentTarget).find("#finishGameSpinner").hide();
                 window.location.replace(page);
             }
         });
+    })
+
+    $(document).on("click", "#startNewGameButton", function (e){
+        $(e.currentTarget).addClass('progress-bar-striped progress-bar-animated');
+        window.location.replace('starting');
     })
 });
 

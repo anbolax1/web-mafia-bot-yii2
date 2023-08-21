@@ -207,6 +207,13 @@ class GameController extends Controller
             if(empty($game)){
                 throw new \Exception("Игра (id = {$post['gameId']}) не найдена в базе!");
             }
+
+
+            $gameStatus = $post['finishType'] == 'canceled' ? Game::GAME_CANCELED : Game::GAME_FINISHED;
+            $winRole = $post['finishType'] == 'canceled' ? '' : $post['finishType'];
+
+            $game->updateAttributes(['status' => $gameStatus,'end_time' => strval(time()), 'win_role' => $winRole]);
+
             $gameSettings = Yii::$app->Game->getGameSettings($game);
 
             if($gameSettings['isRating'] == 'true'){
@@ -215,11 +222,6 @@ class GameController extends Controller
                     throw new \Exception("Произошла ошибка при записи в БД рейтинга");
                 }
             }
-
-            $gameStatus = $post['finishType'] == 'canceled' ? Game::GAME_CANCELED : Game::GAME_FINISHED;
-            $winRole = $post['finishType'] == 'canceled' ? '' : $post['finishType'];
-
-            $game->updateAttributes(['status' => $gameStatus,'end_time' => strval(time()), 'win_role' => $winRole]);
 
             if($post['finishType'] == 'canceled') {
                 return $this->render('starting');

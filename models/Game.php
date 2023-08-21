@@ -90,6 +90,17 @@ class Game extends \yii\db\ActiveRecord
         return $reasonDescriptions[$reason];
     }
 
+    public static function getRoleInRus($role)
+    {
+        $rolesInRus = [
+            self::ROLE_MIR => 'Мирный житель',
+            self::ROLE_SHERIFF => 'Комиссар',
+            self::ROLE_DON => 'Дон мафии',
+            self::ROLE_MAF => 'Мафия'
+        ];
+        return $rolesInRus[$role];
+    }
+
     /**
      * Gets query for [[GameMembers]].
      *

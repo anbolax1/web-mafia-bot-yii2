@@ -163,9 +163,9 @@ $gameSeconds = time() - $gameStartTime;
                 </div>
 
                 <div class="modal-buttons">
-                    <span class="finish-game" id="maf">Победа мирных</span>
-                    <span class="finish-game" id="mir" >Победа мафии</span>
-                    <span class="finish-game" id="canceled">Отмена игры</span>
+                    <span class="finish-game" id="mir"><span id="finishGameSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>Победа мирных</span>
+                    <span class="finish-game" id="maf" ><span id="finishGameSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>Победа мафии</span>
+                    <span class="finish-game" id="canceled"><span id="finishGameSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>Отмена игры</span>
                 </div>
             </div>
         </div>
