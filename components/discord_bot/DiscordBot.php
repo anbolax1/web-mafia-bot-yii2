@@ -132,4 +132,118 @@ class DiscordBot
             throw new \Exception($e->getMessage());
         }
     }
+
+    public function changeUserNick($guildId, $userDiscordId, $oldNick, $slot)
+    {
+        try {
+            if($oldNick[2] == '.'){
+                $oldNick = trim(substr($oldNick, 3));
+            }
+            $newNick = $slot . '. ' . $oldNick;
+
+            $baseUri = 'https://discord.com/api/v9/';
+
+            $headers = empty($headers) ? [
+                'Authorization' => 'Bot ' . env('BOT_TOKEN'),
+                'Content-Type' => 'application/json'
+            ] : $headers;
+
+            $client = new Client([
+                'base_uri' => $baseUri,
+                'headers' => $headers,
+            ]);
+
+
+            $response = $client->patch("guilds/{$guildId}/members/{$userDiscordId}", [
+                'json' => [
+                    'nick' => $newNick,
+                ],
+            ]);
+
+
+            if ($response->getStatusCode() === 200) {
+                echo "Nickname changed successfully!";
+            } else {
+                echo "Failed to change nickname.";
+            }
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function sendMessage($userId, $message)
+    {
+        try {
+            $client = new Client([
+                 'base_uri' => 'https://discord.com/api/',
+                 'headers' => [
+                     'Authorization' => 'Bot ' . env('BOT_TOKEN'),
+                     'Content-Type' => 'application/json',
+                 ],
+             ]);
+
+            $response = $client->post('users/@me/channels', [
+                'json' => [
+                    'recipient_id' => $userId,
+                ],
+            ]);
+
+            $channelId = json_decode($response->getBody(), true)['id'];
+
+            $response = $client->post("channels/{$channelId}/messages", [
+                'json' => [
+                    'content' => $message
+                ],
+            ]);
+        }
+        catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function sendEmbed($userDiscordId, $embed)
+    {
+        try {
+            $client = new Client([
+                 'base_uri' => 'https://discord.com/api/',
+                 'headers' => [
+                     'Authorization' => 'Bot ' . env('BOT_TOKEN'),
+                     'Content-Type' => 'application/json',
+                 ],
+             ]);
+
+            $response = $client->post('users/@me/channels', [
+                'json' => [
+                    'recipient_id' => $userDiscordId,
+                ],
+            ]);
+
+            $channelId = json_decode($response->getBody(), true)['id'];
+
+            // Создание сообщения-эмбед
+            $message = [
+                'embed' => $embed
+            ];
+
+            $response = $client->post("channels/{$channelId}/messages", [
+                'json' => [
+                    'embed' => $message['embed']
+                ],
+            ]);
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function getBotApplications()
+    {
+        try {
+            $response = $this->sendRequest('https://discord.com/api/', 'get', "oauth2/applications/@me");
+        }
+        catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

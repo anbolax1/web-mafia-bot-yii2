@@ -34,6 +34,7 @@ $gameHistory = \app\models\GameHistory::find()->where(['game_id' => $game->id])-
         <div id="memberRoles">
             <?php foreach ($gameMembers as $gameMember): ?>
             <?php
+                //TODO рейтинг только для рейтинговых игр выводить
                 $changeRatingModel = \app\models\MemberRatingHistory::find()->where(['game_id' => $game->id, 'discord_id' => $gameMember->discord_id])->one();
                 if (intval($changeRatingModel->change_rating) > 0) {
                     $changeRating = sprintf("+%s" ,$changeRatingModel->change_rating);
@@ -50,7 +51,9 @@ $gameHistory = \app\models\GameHistory::find()->where(['game_id' => $game->id])-
                         <span><?= $gameMember->name ?></span>
                     </span>
                     <span class="finish-member-name" style="width: 40%;"><?= \app\models\Game::getRoleInRus($gameMember->role); ?></span>
+                    <?php if($gameSettings['isRating'] == 'true'): ?>
                     <span class="finish-member-name member-change-rating <?= $ratingSpanClass; ?>" style="margin-right: 0.2em;"><?= strval($changeRating) ?></span>
+                    <?php endif; ?>
                 </p>
             <?php endforeach; ?>
         </div>

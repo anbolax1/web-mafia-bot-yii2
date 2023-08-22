@@ -243,4 +243,13 @@ class GameController extends Controller
             return $this->render('starting');
         }
     }
+
+    public function actionTest()
+    {
+        try {
+            $result = Yii::$app->bot->sendMessage();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

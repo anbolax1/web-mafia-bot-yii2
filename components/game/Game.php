@@ -18,6 +18,8 @@ class Game
     public function createGame($settings, $gameMembers)
     {
         try {
+            date_default_timezone_set("Europe/Moscow");
+
             $transaction = Yii::$app->db->beginTransaction();
 
             $hostUser = Yii::$app->user->getIdentity();
@@ -54,7 +56,13 @@ class Game
             shuffle($roles);
             shuffle($roles);
 
+            //TODO отправляем ведущему эмбед со всеми участниками и их ролями
+            $embedText = '';
+            $hostDiscordId = $hostUser->discordId;
+            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->discord_id;
+            $gameDatetime = date('d.m.Y H:i:s', $game->start_time);
             foreach ($gameMembers as $gameMemberSlot => &$gameMember) {
+                $embedText .= "{$gameMember->slot}. <@{$gameMember->discord_id}>, роль <b>" . \app\models\Game::getRoleInRus($gameMember['role']) . "</b>".PHP_EOL;
                 if($gameMemberSlot + 1 < 10) {
                     $gameMember['slot'] = sprintf("0%s", $gameMemberSlot + 1);
                 } else {
@@ -72,7 +80,32 @@ class Game
                 if(!$gameMemberModel->save()){
                     throw new \Exception('Участник игры не сохранен в базу!');
                 }
+
+                try {
+                    Yii::$app->bot->changeUserNick($game->guild_id, $gameMember['discord_id'], $gameMember['name'], $gameMember['slot']);
+                } catch (\Exception $e) {
+                    Yii::$app->bot->sendMessage($gameMember['discord_id'], "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот {$gameMember['slot']} и не забудь точку (пример - 01.)!");
+                    continue;
+                }
+
+                try {
+                    //TODO отправляем участнику в лс эмбед с его ролью
+                } catch (\Exception $e) {
+                    //TODO пишем ведущему, что участник сообщение не получил и чтобы ведущий сам отправил ему роль
+                }
             }
+
+            // отправляем ведущему список игроков и ролей
+            $embed = [
+                'title' => 'Участники игры',
+                'description' => $embedText,
+                'footer' => [
+                    'text' => "Игра {$hostServerNick} от {$gameDatetime} (МСК)"
+                ],
+                'color' => '15724534' // Цвет в десятичном формате hex (пр. ff0000 -> 16711680)
+            ];
+
+            Yii::$app->bot->sendEmbed($hostDiscordId, $embed);
             $transaction->commit();
 //            return [$game, $gameMembers];
             return $game;
