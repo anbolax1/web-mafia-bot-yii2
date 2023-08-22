@@ -10,7 +10,7 @@ return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=web-mafia-bot-yii2',
     'username' => 'root',
-    'password' => '',
+    'password' => 'istwood',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
