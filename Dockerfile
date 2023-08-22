@@ -3,6 +3,18 @@ FROM php:7.4-fpm
 
 RUN apt-get update
 
+# install nginx
+RUN apt-get install -y nginx
+
+# COPY NGINX config
+RUN rm /etc/nginx/sites-available/* \
+ && rm /etc/nginx/sites-enabled/*
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx/sites-available/default.conf  /etc/nginx/sites-available/default.conf
+COPY docker/nginx/conf.d/php-backend-upstream.conf /etc/nginx/conf.d/php-backend-upstream.conf
+COPY docker/nginx/fastcgi_params /etc/nginx/fastcgi_params
+RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
+
 RUN apt update -y && apt install -y nano
 #export env
 COPY ./env /app/.env
