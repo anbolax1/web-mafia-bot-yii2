@@ -25,7 +25,7 @@ services:
     container_name: mafia-certbot
     image: certbot/certbot:latest
     volumes:
-      - ./docker/certbot/conf:/etc/letsencrypt/:ro
+      - ./docker/certbot/conf:/etc/letsencrypt/:rw
       - ./docker/certbot/www:/var/www/certbot/:rw
   db:
     image: mysql
