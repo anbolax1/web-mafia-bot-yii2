@@ -16,7 +16,7 @@ services:
       - /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock
       - ./docker/nginx/conf/default.conf:/etc/nginx/conf.d/default.conf
       - ./docker/certbot/conf:/etc/letsencrypt
-      - ./docker/certbot/www:/var/www/certbot/:ro
+      - ./docker/certbot/www:/var/www/certbot
 #      - ./docker/certbot/conf:/etc/nginx/ssl/:ro
     ports:
       - '80:80'
@@ -25,8 +25,8 @@ services:
     container_name: mafia-certbot
     image: certbot/certbot:latest
     volumes:
-      - ./docker/certbot/conf:/etc/letsencrypt/:rw
-      - ./docker/certbot/www:/var/www/certbot/:rw
+      - ./docker/certbot/conf:/etc/letsencrypt
+      - ./docker/certbot/www:/var/www/certbot
   db:
     image: mysql
     restart: always
