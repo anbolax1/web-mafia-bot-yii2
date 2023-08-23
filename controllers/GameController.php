@@ -6,6 +6,7 @@ use app\models\ChannelMember;
 use app\models\Game;
 use app\models\GameHistory;
 use app\models\GameMember;
+use app\models\Meta;
 use yii\base\BaseObject;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -70,6 +71,12 @@ class GameController extends Controller
             } else {
                 throw new \Exception("Пожалуйста, зайдите в голосовой канал!");
             }
+
+            $metaModel = new Meta([
+                'key' => Meta::IS_UPDATE_CHANNEL_MEMBERS,
+                'value' => 'true'
+            ]);
+            $metaModel->save();
             return $this->render('starting', ['host' => $hostChannelMember, 'members' => $channelMembers]);
 //        return $this->redirect(["starting", 'id' => $payroll_model->id]);
         } catch (\Exception $e) {
@@ -86,6 +93,8 @@ class GameController extends Controller
             $gameSettings = $post['settings'];
 
             $game = Yii::$app->Game->createGame($gameSettings, $gameMembers);
+
+            $metaModel = Meta::deleteAll(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS]);
 
             return $this->render('game', ['game' => $game]);
 //            return $this->render('/game/game');

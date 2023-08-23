@@ -101,6 +101,28 @@ class Game extends \yii\db\ActiveRecord
         return $rolesInRus[$role];
     }
 
+    public static function getRoleTask($role)
+    {
+        $tasks = [
+            self::ROLE_MIR => 'Попытаться найти мафию и выгнать её на дневном голосовании. Удачи!',
+            self::ROLE_SHERIFF => 'Ваша задача: Искать ночью мафию, написав в лс ведущему *Я ком чек <номер игрока>*. Удачи!',
+            self::ROLE_DON => 'Убивать мирных жителей вместе со своей мафией и искать ночью комиссара, написав в лс ведущему *Я дон чек <номер игрока>*. Удачи!',
+            self::ROLE_MAF => 'Убивать мирных жителей и не выдать себя. Удачи!'
+        ];
+        return $tasks[$role];
+    }
+
+    public static function getEmbedColor($role)
+    {
+        $colors = [
+            self::ROLE_MIR => 15542585,
+            self::ROLE_SHERIFF => 16761125,
+            self::ROLE_DON => 328965,
+            self::ROLE_MAF => 328965
+        ];
+        return $colors[$role];
+    }
+
     /**
      * Gets query for [[GameMembers]].
      *

@@ -59,10 +59,13 @@ class Game
             //TODO отправляем ведущему эмбед со всеми участниками и их ролями
             $embedText = '';
             $hostDiscordId = $hostUser->discordId;
-            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->discord_id;
+            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
             $gameDatetime = date('d.m.Y H:i:s', $game->start_time);
             foreach ($gameMembers as $gameMemberSlot => &$gameMember) {
-                $embedText .= "{$gameMember->slot}. <@{$gameMember->discord_id}>, роль <b>" . \app\models\Game::getRoleInRus($gameMember['role']) . "</b>".PHP_EOL;
+                //TODO убрать эту проверку
+               /* if($gameMember['discord_id'] != '472399225460752400'){
+                    continue;
+                }*/
                 if($gameMemberSlot + 1 < 10) {
                     $gameMember['slot'] = sprintf("0%s", $gameMemberSlot + 1);
                 } else {
@@ -77,6 +80,9 @@ class Game
                     'slot' => strval($gameMember['slot']),
                     'role' => $gameMember['role'],
                 ]);
+
+                $embedText .= "{$gameMember['slot']}. <@{$gameMember['discord_id']}>, роль **" . \app\models\Game::getRoleInRus($gameMember['role']) . "**".PHP_EOL;
+
                 if(!$gameMemberModel->save()){
                     throw new \Exception('Участник игры не сохранен в базу!');
                 }
@@ -89,9 +95,17 @@ class Game
                 }
 
                 try {
-                    //TODO отправляем участнику в лс эмбед с его ролью
+                    $memberEmber = [
+                        'title' => sprintf("%s. Ваша роль - %s", $gameMember['slot'], \app\models\Game::getRoleInRus($gameMember['role'])),
+                        'description' => sprintf("Ваша задача: %s", \app\models\Game::getRoleTask($gameMember['role'])),
+                        'footer' => [
+                            'text' => "Игра {$hostServerNick} от {$gameDatetime} (МСК)"
+                        ],
+                        'color' => \app\models\Game::getEmbedColor($gameMember['role'])
+                    ];
+                    Yii::$app->bot->sendEmbed($gameMember['discord_id'], $memberEmber);
                 } catch (\Exception $e) {
-                    //TODO пишем ведущему, что участник сообщение не получил и чтобы ведущий сам отправил ему роль
+                    Yii::$app->bot->sendMessage($hostServerNick, sprintf("<@%s> не получил в ЛС свою роль. Напиши ему сам. Его роль - %s", $gameMember['discord_id'], \app\models\Game::getRoleInRus($gameMember['role'])));
                 }
             }
 
