@@ -55,15 +55,19 @@ class GameController extends Controller
     public function actionStarting()
     {
         try {
+            if(!empty($_GET) && !empty($_GET['status']) && $_GET['status'] == 'wait') {
+                sleep(10);
+            }
+
             $metaModel = Meta::find()->where(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS])->one();
             if(!empty($metaModel)){
                 $metaModel->updateAttributes(['timestamp' => strval(time())]);
             } else {
                 $metaModel = new Meta([
-                                          'key' => Meta::IS_UPDATE_CHANNEL_MEMBERS,
-                                          'value' => 'true',
-                                          'timestamp' => strval(time())
-                                      ]);
+                    'key' => Meta::IS_UPDATE_CHANNEL_MEMBERS,
+                    'value' => 'true',
+                    'timestamp' => strval(time())
+                ]);
                 $metaModel->save();
             }
 
@@ -85,8 +89,9 @@ class GameController extends Controller
                     throw new \Exception("Пожалуйста, зайдите в голосовой канал, если ещё не зашли и подождите 10 секунд, страница обновится сама!");
                 }
             } catch (\Exception $e) {
-                sleep(10);
-                return $this->render('starting');
+//                sleep(10);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+                return $this->redirect(['starting', 'status' => 'wait']);
             }
 
             return $this->render('starting', ['host' => $hostChannelMember, 'members' => $channelMembers]);

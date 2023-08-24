@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string|null $key
  * @property string|null $value
+ * @property string|null $timestamp
  */
 class Meta extends \yii\db\ActiveRecord
 {
@@ -28,7 +29,7 @@ class Meta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['key', 'value'], 'string', 'max' => 255],
+            [['key', 'value', 'timestamp'], 'string', 'max' => 255],
         ];
     }
 
