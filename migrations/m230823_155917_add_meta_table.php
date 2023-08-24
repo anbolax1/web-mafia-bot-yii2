@@ -23,6 +23,7 @@ class m230823_155917_add_meta_table extends Migration
             'id' => $this->primaryKey(),
             'key' => $this->string()->null(),
             'value' => $this->string()->null(),
+            'timestamp' => $this->string()->null()
         ], $tableOptions);
     }
 
