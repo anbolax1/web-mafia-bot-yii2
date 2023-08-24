@@ -314,7 +314,11 @@ class Game
             }
             $streakCoeff = $this->getStreakCoeff($streak);
 
-            $foulsCoeff = in_array($memberResult['delete_reason'], [\app\models\Game::REASON_FOULED, \app\models\Game::REASON_TECH]) ? 3 : 0;
+            if(!empty($memberResult['delete_reason'])){
+                $foulsCoeff = in_array($memberResult['delete_reason'], [\app\models\Game::REASON_FOULED, \app\models\Game::REASON_TECH]) ? 3 : 0;
+            } else {
+                $foulsCoeff = 0;
+            }
 
             // формула посчёта баллов за игру
             if($isMemberWin) {
@@ -370,7 +374,11 @@ class Game
             }
             $streakCoeff = $this->getStreakCoeff($streak);
 
-            $foulsCoeff = in_array($memberResult['delete_reason'], [\app\models\Game::REASON_FOULED, \app\models\Game::REASON_TECH]) ? 3 : 0;
+            if(!empty($memberResult['delete_reason'])){
+                $foulsCoeff = in_array($memberResult['delete_reason'], [\app\models\Game::REASON_FOULED, \app\models\Game::REASON_TECH]) ? 3 : 0;
+            } else {
+                $foulsCoeff = 0;
+            }
 
             // формула посчёта баллов за игру
             if($isMemberWin) {
