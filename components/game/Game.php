@@ -262,7 +262,7 @@ class Game
                     'discord_id' => strval($gameMember->discord_id),
                     'game_id' => $game->id,
                     'type' => MemberRating::RATING_GUILD,
-                    'guild_id' => $game->guild_id,
+                    'guild_id' => strval($game->guild_id),
                     'change_rating' => strval($writeGuildRatingResult)
                 ]);
                 $memberRatingHistory->save();
