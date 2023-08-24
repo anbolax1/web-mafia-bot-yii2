@@ -35,8 +35,11 @@ class GameController extends Controller
 
     public function actionIndex(): string
     {
-//        Yii::$app->bot->sendMessage(1046294793157885996, 'Hello!');
-        return $this->render('index');
+        if(!empty($_GET) && !empty($_GET['redirect_to_starting']) && $_GET['redirect_to_starting'] == 'true') {
+            return $this->render('index', ['redirect_to_starting' => 'true']);
+        } else {
+            return $this->render('index');
+        }
     }
 
     public function actionSend()
@@ -55,9 +58,9 @@ class GameController extends Controller
     public function actionStarting()
     {
         try {
-            if(!empty($_GET) && !empty($_GET['status']) && $_GET['status'] == 'wait') {
+            /*if(!empty($_GET) && !empty($_GET['status']) && $_GET['status'] == 'wait') {
                 sleep(10);
-            }
+            }*/
 
             $metaModel = Meta::find()->where(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS])->one();
             if(!empty($metaModel)){
@@ -86,12 +89,12 @@ class GameController extends Controller
                         ->andWhere(['<>', 'discord_id', $hostDiscordId])
                         ->all();
                 } else {
-                    throw new \Exception("Пожалуйста, зайдите в голосовой канал, если ещё не зашли и подождите 10 секунд, страница обновится сама!");
+                    throw new \Exception("Пожалуйста, зайдите в голосовой канал, если ещё не зашли, и подождите 10 секунд, страница обновится сама!");
                 }
             } catch (\Exception $e) {
 //                sleep(10);
                 Yii::$app->session->setFlash('error', $e->getMessage());
-                return $this->redirect(['starting', 'status' => 'wait']);
+                return $this->redirect(['index', 'redirect_to_starting' => 'true']);
             }
 
             return $this->render('starting', ['host' => $hostChannelMember, 'members' => $channelMembers]);
