@@ -136,7 +136,8 @@ class Game
 
             $hostUser = Yii::$app->user->getIdentity();
             $hostDiscordId = $hostUser->discordId;
-            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
+//            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
+            $hostServerNick = $hostUser->username;
             $gameDatetime = date('d.m.Y H:i:s', $game->start_time);
 
             $gameStatus = $post['finishType'] == 'canceled' ? \app\models\Game::GAME_CANCELED : \app\models\Game::GAME_FINISHED;
