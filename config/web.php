@@ -39,6 +39,39 @@ $config = [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'exportInterval' => 1,
+                    'logFile' => '@runtime/logs/web/game/finish-game.log',
+                    'logVars' => [],
+                    'levels' => ['error', 'info'],
+                    'categories' => ['finish-game'],
+                    'prefix' => function($message) {
+                        return '';
+                    }
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'exportInterval' => 1,
+                    'logFile' => '@runtime/logs/web/game/write-rating.log',
+                    'logVars' => [],
+                    'levels' => ['error', 'info'],
+                    'categories' => ['write-rating'],
+                    'prefix' => function($message) {
+                        return '';
+                    }
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'exportInterval' => 1,
+                    'logFile' => '@runtime/logs/web/game/create-game.log',
+                    'logVars' => [],
+                    'levels' => ['error', 'info'],
+                    'categories' => ['create-game'],
+                    'prefix' => function($message) {
+                        return '';
+                    }
+                ],
             ],
         ],
         'db' => $db,

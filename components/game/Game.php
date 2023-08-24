@@ -124,6 +124,7 @@ class Game
             return $game;
         } catch (\Exception $e) {
             $transaction->rollBack();
+            Yii::error($e->getMessage(), 'create-game');
             throw new \Exception($e->getMessage());
         }
     }
@@ -208,6 +209,7 @@ class Game
             Yii::$app->bot->sendEmbed($hostDiscordId, $embed);
             return true;
         } catch (\Exception $e) {
+            Yii::error($e->getMessage(), 'finish-game');
             throw new \Exception($e->getMessage());
         }
     }
@@ -269,6 +271,7 @@ class Game
             }
             return  true;
         } catch (\Exception $e) {
+            Yii::error($e->getMessage(), 'write-rating');
             throw new \Exception($e->getMessage());
         }
     }
