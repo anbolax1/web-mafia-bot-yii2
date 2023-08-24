@@ -303,7 +303,7 @@ class Game
             ЛХ: 3/3 +3
             Поднялся по фолам или тех. причине: -3 */
             $memberResult = json_decode($gameMember->result, true);
-            $theBestMoveChange = $memberResult['the_best_move']['right_count'];
+            $theBestMoveChange = isset($memberResult['the_best_move']['right_count']) ?? 0;
 
             $isMemberWin = $this->isMemberWin($gameMember, $memberGames[0]);
             if($isMemberWin) {
@@ -359,7 +359,7 @@ class Game
             ЛХ: 3/3 +3
             Поднялся по фолам или тех. причине: -3 */
             $memberResult = json_decode($gameMember->result, true);
-            $theBestMoveChange = $memberResult['the_best_move']['right_count'];
+            $theBestMoveChange = isset($memberResult['the_best_move']['right_count']) ?? 0;
 
             $isMemberWin = $this->isMemberWin($gameMember, $memberGames[0]);
             if($isMemberWin) {
