@@ -72,11 +72,18 @@ class GameController extends Controller
                 throw new \Exception("Пожалуйста, зайдите в голосовой канал!");
             }
 
-            $metaModel = new Meta([
-                'key' => Meta::IS_UPDATE_CHANNEL_MEMBERS,
-                'value' => 'true'
-            ]);
-            $metaModel->save();
+            $metaModel = Meta::find()->where(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS])->one();
+            if(!empty($metaModel)){
+                $metaModel->updateAttributes(['timestamp' => strval(time())]);
+            } else {
+                $metaModel = new Meta([
+                    'key' => Meta::IS_UPDATE_CHANNEL_MEMBERS,
+                    'value' => 'true',
+                    'timestamp' => strval(time())
+                ]);
+                $metaModel->save();
+            }
+
             return $this->render('starting', ['host' => $hostChannelMember, 'members' => $channelMembers]);
 //        return $this->redirect(["starting", 'id' => $payroll_model->id]);
         } catch (\Exception $e) {
@@ -93,8 +100,6 @@ class GameController extends Controller
             $gameSettings = $post['settings'];
 
             $game = Yii::$app->Game->createGame($gameSettings, $gameMembers);
-
-            $metaModel = Meta::deleteAll(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS]);
 
             return $this->render('game', ['game' => $game]);
 //            return $this->render('/game/game');

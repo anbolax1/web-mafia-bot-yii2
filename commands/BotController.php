@@ -5,6 +5,7 @@ namespace app\commands;
 use app\components\discord_bot\DiscordBot;
 use app\models\ChannelMember;
 use app\models\Guild;
+use app\models\Meta;
 use app\models\VoiceChannel;
 use Discord\Parts\Channel\Channel;
 use Yii;
@@ -18,6 +19,10 @@ class BotController extends Controller
 {
     public function actionSaveChannelMembers()
     {
+        $meta = Meta::find()->where(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS])->one();
+        if(time() - intval($meta->timestamp) > 20) {
+            exit();
+        }
         $token = env('BOT_TOKEN');
         $discord = new Discord(
             [
