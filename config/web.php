@@ -33,7 +33,7 @@ $config = [
             'useFileTransport' => true,
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => YII_DEBUG ? 3 : 3,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
