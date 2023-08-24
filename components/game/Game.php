@@ -181,9 +181,9 @@ class Game
                     'color' => '15724534' // Цвет в десятичном формате hex (пр. ff0000 -> 16711680)
                 ];
                 //TODO убрать проверку
-                if($gameMember->discord_id != 162954416528293889) {
+                /*if($gameMember->discord_id != 162954416528293889) {
                     continue;
-                }
+                }*/
                 try {
                     Yii::$app->bot->changeUserNick($game->guild_id, $gameMember->discord_id, $gameMember->name, '');
                 } catch (\Exception $e) {}
