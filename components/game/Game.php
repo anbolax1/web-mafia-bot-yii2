@@ -56,7 +56,6 @@ class Game
             shuffle($roles);
             shuffle($roles);
 
-            //TODO отправляем ведущему эмбед со всеми участниками и их ролями
             $embedText = '';
             $hostDiscordId = $hostUser->discordId;
             $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
@@ -81,7 +80,7 @@ class Game
                     'role' => $gameMember['role'],
                 ]);
 
-                $embedText .= "{$gameMember['slot']}. <@{$gameMember['discord_id']}>, роль **" . \app\models\Game::getRoleInRus($gameMember['role']) . "**".PHP_EOL;
+                $embedText .= "{$gameMember['slot']}. <@{$gameMember['discord_id']}>, роль: **" . \app\models\Game::getRoleInRus($gameMember['role']) . "**".PHP_EOL;
 
                 if(!$gameMemberModel->save()){
                     throw new \Exception('Участник игры не сохранен в базу!');
@@ -125,6 +124,90 @@ class Game
             return $game;
         } catch (\Exception $e) {
             $transaction->rollBack();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function finishGame($game, $post)
+    {
+        try {
+            date_default_timezone_set("Europe/Moscow");
+
+            $hostUser = Yii::$app->user->getIdentity();
+            $hostDiscordId = $hostUser->discordId;
+            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
+            $gameDatetime = date('d.m.Y H:i:s', $game->start_time);
+
+            $gameStatus = $post['finishType'] == 'canceled' ? \app\models\Game::GAME_CANCELED : \app\models\Game::GAME_FINISHED;
+            $winRole = $post['finishType'] == 'canceled' ? '' : $post['finishType'];
+
+            $game->updateAttributes(['status' => $gameStatus,'end_time' => strval(time()), 'win_role' => $winRole]);
+
+            $gameSettings = Yii::$app->Game->getGameSettings($game);
+
+            if($gameSettings['isRating'] == 'true'){
+                $result = Yii::$app->Game->writeRating($game);
+                if(!$result){
+                    throw new \Exception("Произошла ошибка при записи в БД рейтинга");
+                }
+            }
+
+            $gameMembers = GameMember::find()->where(['game_id' => $game->id])->all();
+            $hostEmbedText = '';
+            foreach ($gameMembers as $gameMember) {
+                $memberRating = MemberRating::find()->where(['discord_id' => $gameMember->discord_id, 'type' => MemberRating::RATING_GENERAL])->one()->rating;
+                $memberRatingChange = MemberRatingHistory::find()->where(['game_id' => $game->id, 'discord_id' => $gameMember->discord_id])->one()->change_rating;
+                $memberRatingChange = intval($memberRatingChange) < 0 ? $memberRatingChange : '+'.$memberRatingChange;
+
+
+
+                $isMemberWin = \app\models\Game::isMemberWin($game->win_role, $gameMember->role);
+                if($isMemberWin) {
+                    $memberGames = GameMember::getMemberGames($gameMember);
+                    $streak = $this->getWinStreak($gameMember, $memberGames);
+                    $embedText = sprintf("Ты выиграл на роли **%s**.%sТвой рейтинг: **%s (%s)**.%sТвоя серия побед: **%s**.", \app\models\Game::getRoleInRus($gameMember->role), PHP_EOL, $memberRating, $memberRatingChange, PHP_EOL, $streak);
+                    $hostEmbedText .= "{$gameMember->slot}. <@{$gameMember->discord_id}>, роль: **" . \app\models\Game::getRoleInRus($gameMember->role) ."**, рейтинг: **{$memberRating} ({$memberRatingChange})**, серия побед: **{$streak}**" . PHP_EOL;
+                } else {
+                    $embedText = sprintf("Ты проиграл на роли **%s**.%sТвой рейтинг: **%s (%s)**", \app\models\Game::getRoleInRus($gameMember->role), PHP_EOL, $memberRating, $memberRatingChange);
+                    $hostEmbedText .= "{$gameMember->slot}. <@{$gameMember->discord_id}>, роль: **" . \app\models\Game::getRoleInRus($gameMember->role) ."**, рейтинг: **{$memberRating} ({$memberRatingChange})**" . PHP_EOL;
+
+                }
+                $memberEmbed = [
+                    'title' => 'Победа ' . \app\models\Game::getGameResult($game->win_role),
+                    'description' => $embedText,
+                    'footer' => [
+                        'text' => "Игра {$hostServerNick} от {$gameDatetime} (МСК)"
+                    ],
+                    'color' => '15724534' // Цвет в десятичном формате hex (пр. ff0000 -> 16711680)
+                ];
+                //TODO убрать проверку
+                if($gameMember->discord_id != 162954416528293889) {
+                    continue;
+                }
+                try {
+                    Yii::$app->bot->changeUserNick($game->guild_id, $gameMember->discord_id, $gameMember->name, '');
+                } catch (\Exception $e) {}
+
+                try {
+                    Yii::$app->bot->sendEmbed($gameMember->discord_id, $memberEmbed);
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            // отправляем ведущему список игроков и ролей
+            $embed = [
+                'title' => 'Победа ' . \app\models\Game::getGameResult($game->win_role),
+                'description' => $hostEmbedText,
+                'footer' => [
+                    'text' => "Игра {$hostServerNick} от {$gameDatetime} (МСК)"
+                ],
+                'color' => '15724534' // Цвет в десятичном формате hex (пр. ff0000 -> 16711680)
+            ];
+
+            Yii::$app->bot->sendEmbed($hostDiscordId, $embed);
+            return true;
+        } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }

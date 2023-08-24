@@ -4,3 +4,4 @@ vendor
 .idea
 members.log
 config/db.php
+docker/nginx/conf/default.conf

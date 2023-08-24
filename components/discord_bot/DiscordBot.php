@@ -133,13 +133,17 @@ class DiscordBot
         }
     }
 
-    public function changeUserNick($guildId, $userDiscordId, $oldNick, $slot)
+    public function changeUserNick($guildId, $userDiscordId, $oldNick, $slot = '')
     {
         try {
             if($oldNick[2] == '.'){
                 $oldNick = trim(substr($oldNick, 3));
             }
-            $newNick = $slot . '. ' . $oldNick;
+            if(!empty($slot)){
+                $newNick = $slot . '. ' . $oldNick;
+            } else {
+                $newNick = $oldNick;
+            }
 
             $baseUri = 'https://discord.com/api/v9/';
 

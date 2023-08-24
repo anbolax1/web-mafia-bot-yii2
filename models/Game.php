@@ -123,6 +123,24 @@ class Game extends \yii\db\ActiveRecord
         return $colors[$role];
     }
 
+    public static function isMemberWin($gameWinRole, $memberRole)
+    {
+        if(($gameWinRole == 'maf' && in_array($memberRole, ['maf', 'don'])) || ($gameWinRole == 'mir' && in_array($memberRole, ['mir', 'com']))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getGameResult($win_role)
+    {
+        if($win_role == 'maf') {
+            return 'Мафии';
+        } else {
+            return 'Мирных жителей';
+        }
+    }
+
     /**
      * Gets query for [[GameMembers]].
      *
