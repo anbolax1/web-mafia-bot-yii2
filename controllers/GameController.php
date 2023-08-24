@@ -55,6 +55,18 @@ class GameController extends Controller
     public function actionStarting()
     {
         try {
+            $metaModel = Meta::find()->where(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS])->one();
+            if(!empty($metaModel)){
+                $metaModel->updateAttributes(['timestamp' => strval(time())]);
+            } else {
+                $metaModel = new Meta([
+                                          'key' => Meta::IS_UPDATE_CHANNEL_MEMBERS,
+                                          'value' => 'true',
+                                          'timestamp' => strval(time())
+                                      ]);
+                $metaModel->save();
+            }
+
             $game = Yii::$app->user->getIdentity()->getGameInProcess();
             if(!empty($game)){
                 return $this->redirect(['game', 'game' => $game]);
@@ -62,26 +74,19 @@ class GameController extends Controller
 
             $hostUser = Yii::$app->user->getIdentity();
             $hostDiscordId = $hostUser->discordId;
-            $hostChannelMember = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one();
-            if(!empty($hostChannelMember)){
-                $channelMembers = ChannelMember::find()
-                    ->where(['channel_id' => $hostChannelMember->channel_id])
-                    ->andWhere(['<>', 'discord_id', $hostDiscordId])
-                    ->all();
-            } else {
-                throw new \Exception("Пожалуйста, зайдите в голосовой канал!");
-            }
-
-            $metaModel = Meta::find()->where(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS])->one();
-            if(!empty($metaModel)){
-                $metaModel->updateAttributes(['timestamp' => strval(time())]);
-            } else {
-                $metaModel = new Meta([
-                    'key' => Meta::IS_UPDATE_CHANNEL_MEMBERS,
-                    'value' => 'true',
-                    'timestamp' => strval(time())
-                ]);
-                $metaModel->save();
+            try {
+                $hostChannelMember = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one();
+                if(!empty($hostChannelMember)){
+                    $channelMembers = ChannelMember::find()
+                        ->where(['channel_id' => $hostChannelMember->channel_id])
+                        ->andWhere(['<>', 'discord_id', $hostDiscordId])
+                        ->all();
+                } else {
+                    throw new \Exception("Пожалуйста, зайдите в голосовой канал, если ещё не зашли и подождите 10 секунд, страница обновится сама!");
+                }
+            } catch (\Exception $e) {
+                sleep(10);
+                return $this->render('starting');
             }
 
             return $this->render('starting', ['host' => $hostChannelMember, 'members' => $channelMembers]);
