@@ -26,6 +26,7 @@ class WebBotController extends Controller
                     if (!empty($botGuildVoiceChannels)) {
                         $guildsVoiceChannels[$botGuild['id']]['channels'] = $botGuildVoiceChannels;
                         $guildsVoiceChannels[$botGuild['id']]['guild'] = $botGuild['id'];
+                        $guildsVoiceChannels[$botGuild['id']]['name'] = $botGuild['name'];
                     }
                 }
             }
@@ -39,6 +40,7 @@ class WebBotController extends Controller
                     } else {
                         $guildModel = new Guild([
                             'discord_id' => strval($guildId),
+                            'name' => preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $guildsVoiceChannel['name']),
                             'voice_channels' => json_encode($guildsVoiceChannel['channels'], JSON_UNESCAPED_UNICODE)
                         ]);
                     }

@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\base\BaseObject;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "game".
@@ -67,14 +69,28 @@ class Game extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'host_id' => 'Host ID',
-            'guild_id' => 'Guild ID',
-            'status' => 'Status',
-            'win_role' => 'Win Role',
-            'start_time' => 'Start Time',
-            'end_time' => 'End Time',
+            'id' => 'Номер',
+            'hostName' => 'Ведущий',
+            'guildName' => 'Сервер',
+            'gameStatus' => 'Статус игры',
+            'winRole' => 'Победитель',
+            'startTime' => 'Начало игры',
+            'endTime' => 'Окончание игры',
         ];
+    }
+
+    public function getGames($data = []): ActiveDataProvider
+    {
+        $query = self::find()->where(['<>', 'status', Game::GAME_CANCELED]);
+
+        $dataProvider = new ActiveDataProvider([
+               'query' => $query,
+               'sort' => $this->sortField()
+           ]);
+
+        $this->load($data);
+
+        return $dataProvider;
     }
 
     public static function getGameActionDescription($reason): string
@@ -171,6 +187,44 @@ class Game extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'host_id']);
     }
 
+    public function getHostName()
+    {
+        return User::find()->where(['id' => $this->host_id])->one()->username;
+    }
+
+    public function getGuildName()
+    {
+        return Guild::find()->where(['discord_id' => $this->guild_id])->one()->name;
+    }
+
+    public function getGameStatus()
+    {
+        $statuses = [
+            self::GAME_IN_PROCESS => 'Игра в процессе',
+            self::GAME_FINISHED => 'Игра завершена',
+        ];
+        return $statuses[$this->status];
+    }
+
+    public function getWinRole()
+    {
+        if(empty($this->win_role)){
+            return '';
+        } else {
+            return $this->win_role == 'mir' ? 'Мирные жители' : 'Мафия';
+        }
+    }
+
+    public function getStartTime()
+    {
+        return gmdate("d.m.Y H:i:s", $this->start_time);
+    }
+
+    public function getEndTime()
+    {
+        return gmdate("d.m.Y H:i:s", $this->end_time);
+    }
+
     /**
      * Gets query for [[GameHistoriy]].
      *
@@ -189,5 +243,46 @@ class Game extends \yii\db\ActiveRecord
     public function getMemberRatingHistory()
     {
         return $this->hasMany(MemberRatingHistory::class, ['game_id' => 'id']);
+    }
+
+    public static function sortField($params = null): array
+    {
+        return [
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'attributes' => [
+                'id' => [
+                    'asc' => ['id' => SORT_ASC],
+                    'desc' => ['id' => SORT_DESC],
+                    'default' => SORT_ASC,
+                ],
+                'host_id' => [
+                    'asc' => ['external_id' => SORT_ASC],
+                    'desc' => ['external_id' => SORT_DESC],
+                    'default' => SORT_ASC,
+                ],
+                'guild_id' => [
+                    'asc' => ['pay_amount' => SORT_ASC],
+                    'desc' => ['pay_amount' => SORT_DESC],
+                    'default' => SORT_ASC,
+                ],
+                'status' => [
+                    'asc' => ['payroll_info.marketplace' => SORT_ASC],
+                    'desc' => ['payroll_info.marketplace' => SORT_DESC],
+                    'default' => SORT_ASC,
+                ],
+                'win_role' => [
+                    'asc' => ['curator_info.fio' => SORT_ASC],
+                    'desc' => ['curator_info.fio' => SORT_DESC],
+                    'default' => SORT_ASC,
+                ],
+                'start_time' => [
+                    'asc' => ['employees_count' => SORT_ASC],
+                    'desc' => ['employees_count' => SORT_DESC],
+                    'default' => SORT_ASC,
+                ],
+            ],
+        ];
     }
 }

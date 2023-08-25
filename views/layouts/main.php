@@ -2,6 +2,8 @@
 
 /** @var yii\web\View $this */
 /** @var string $content */
+use app\assets\site\SiteAsset;
+SiteAsset::register($this);
 
 use app\assets\AppAsset;
 use app\widgets\Alert;

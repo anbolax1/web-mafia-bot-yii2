@@ -381,6 +381,8 @@ span#clearMembersOnVote {
     height: 5.5vh;
     user-select: none;
     font-size: 1.7vmax;
+    border-top-left-radius: 15px 15px;
+    border-top-right-radius: 15px 15px;
 }
 div#deleteReasons, div#gameNotes, div#roleNote {
     background: rgba(62, 61, 75, 0.85);

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Game;
 use app\models\User;
 use Yii;
 use yii\base\BaseObject;
@@ -63,7 +64,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $gameModel = new Game();
+        $dataProvider = $gameModel->getGames(Yii::$app->request->queryParams);
+        $games = Game::find()->where(['<>', 'status', Game::GAME_CANCELED]);
+        return $this->render('index', ['dataProvider' => $dataProvider]);
     }
 
     /**

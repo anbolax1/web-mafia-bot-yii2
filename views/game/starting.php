@@ -15,7 +15,7 @@ $hostAvatar = $host->avatar;
 
 <div class="row" style="height: 80vh;">
     <div class="col-md-6" style="padding:0; background: rgba(96, 96, 112 ,0.85); border-radius: 15px; box-shadow: 5px 5px 5px black; max-height: 100%;">
-        <h2 class="game-settings-h2" style1="border-top-left-radius: 15px 15px; border-top-right-radius: 15px 15px; ">
+        <h2 class="game-settings-h2" style="border-top-left-radius: 15px 15px; border-top-right-radius: 15px 15px; ">
             <p style="margin: 0;">Ведущий -
                 <img id="hostAvatar" src="<?= $hostAvatar;?>" alt="Avatar" class="avatar">
                 <span id="hostName">Istwood100</span>

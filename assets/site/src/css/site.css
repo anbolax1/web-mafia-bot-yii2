@@ -1,0 +1,40 @@
+div.summary {
+    -webkit-text-stroke: 0.2px black;
+    color:whitesmoke;
+    text-shadow:5px 0px 5px #000000, 0px 2px 5px #000000;
+}
+.table {
+    --bs-table-bg: rgba(96, 96, 112, 0.85) !important;
+    border: solid 1px #404245 !important;
+    border-collapse: collapse;
+    border-radius: 1em;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px black;
+}
+
+.table > tbody > tr {
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.table > tbody > tr:hover{
+    background-color: black;
+}
+
+.table > tbody > tr > td {
+    color: whitesmoke;
+    user-select: none;
+}
+
+.table > thead > tr > th > a, .table > thead > tr > th {
+    text-align: center;
+    text-decoration: none;
+    color: whitesmoke;
+}
+
+h1.grid-title {
+    -webkit-text-stroke: 1px black;
+    color: whitesmoke;
+    text-shadow:5px 0px 5px #000000, 0px 3px 5px #000000;
+}
