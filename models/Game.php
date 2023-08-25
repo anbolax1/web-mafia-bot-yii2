@@ -222,6 +222,9 @@ class Game extends \yii\db\ActiveRecord
 
     public function getEndTime()
     {
+        if(empty($this->end_time)){
+            return '';
+        }
         return gmdate("d.m.Y H:i:s", $this->end_time);
     }
 
