@@ -12,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 //use function RingCentral\Psr7\str;
 
@@ -41,6 +42,25 @@ class GameController extends Controller
             return $this->render('index');
         }
     }
+
+    public function actionView($id)
+    {
+        $game = $this->findModel($id);
+
+        return $this->render("finish", [
+            'game' => $game,
+        ]);
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = Game::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
 
     public function actionSend()
     {

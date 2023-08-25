@@ -1,6 +1,7 @@
 <?php
 use app\assets\game\GameAsset;
 GameAsset::register($this);
+$this->title = 'Игра';
 
 /* @var $game \app\models\Game */
 

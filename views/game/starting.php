@@ -5,6 +5,7 @@ GameAsset::register($this);
 /* @var $host \yii\db\ActiveRecord */
 /* @var $members \yii\db\ActiveRecord */
 
+$this->title = 'Подготовка к игре';
 
 $hostAvatar = $host->avatar;
 ?>
