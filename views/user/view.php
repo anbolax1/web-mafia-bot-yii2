@@ -2,24 +2,21 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\assets\game_index\GameIndexAsset;
 
 /** @var yii\web\View $this */
 /** @var app\models\User $model */
 
 $this->title = $model->username;
 \yii\web\YiiAsset::register($this);
-
+GameIndexAsset::register($this);
 $avatarUrl = "https://cdn.discordapp.com/avatars/$model->discordId/$model->avatar.jpg";
 ?>
 <div class="user-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="user-name"><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    </p>
-
-    <img src="<?= $avatarUrl?>"></img>
+    <img src="<?= $avatarUrl?>" style="border-radius: 50%;"></img>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -30,5 +27,7 @@ $avatarUrl = "https://cdn.discordapp.com/avatars/$model->discordId/$model->avata
             'statusDescription',
         ],
     ]) ?>
-
+    <p>
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </p>
 </div>
