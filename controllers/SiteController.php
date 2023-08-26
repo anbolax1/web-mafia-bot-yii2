@@ -149,4 +149,9 @@ class SiteController extends Controller
     {
         $get = $_GET;
     }
+
+    public function actionProfile()
+    {
+        return $this->render('profile');
+    }
 }
