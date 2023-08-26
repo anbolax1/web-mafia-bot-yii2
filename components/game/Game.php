@@ -399,9 +399,10 @@ class Game
     public function getWinStreak($gameMember, $memberGames)
     {
         try {
-            $memberRole = in_array($gameMember->role, [\app\models\Game::ROLE_SHERIFF, \app\models\Game::ROLE_MIR]) ? \app\models\Game::ROLE_MIR : \app\models\Game::ROLE_MAF;
             $winStreak = 0;
             foreach ($memberGames as $memberGame) {
+                $gameMember = GameMember::find()->where(['game_id' => $memberGame->id, 'discord_id' => $gameMember->discord_id])->one();
+                $memberRole = in_array($gameMember->role, [\app\models\Game::ROLE_SHERIFF, \app\models\Game::ROLE_MIR]) ? \app\models\Game::ROLE_MIR : \app\models\Game::ROLE_MAF;
                 if($memberGame->win_role == $memberRole) {
                     $winStreak++;
                 } else {
