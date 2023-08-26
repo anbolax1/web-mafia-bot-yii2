@@ -141,7 +141,7 @@ class Game extends \yii\db\ActiveRecord
 
     public static function isMemberWin($gameWinRole, $memberRole)
     {
-        if(($gameWinRole == 'maf' && in_array($memberRole, ['maf', 'don'])) || ($gameWinRole == 'mir' && in_array($memberRole, ['mir', 'com']))){
+        if(($gameWinRole == 'maf' && in_array($memberRole, ['maf', 'don'])) || ($gameWinRole == 'mir' && in_array($memberRole, ['mir', 'sheriff']))){
             return true;
         } else {
             return false;
