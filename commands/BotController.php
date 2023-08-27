@@ -69,9 +69,12 @@ class BotController extends Controller
                                     $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->user->username);
                                 }
 
-                                if($name[2] == '.'){
-                                    $name = trim(substr($name, 3));
+                                if(strlen($name) > 3) {
+                                    if($name[2] == '.'){
+                                        $name = trim(substr($name, 3));
+                                    }
                                 }
+
                                 $name = str_replace("!Вед.", '', $name);
                                 $name = str_replace("Зр.", '', $name);
                                 $name = trim($name);
