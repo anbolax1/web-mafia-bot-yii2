@@ -410,6 +410,11 @@ $( document ).ready(function() {
         $(e.currentTarget).addClass('progress-bar-striped progress-bar-animated');
         window.location.replace('starting');
     })
+
+    $(document).on("click", "#showPrioritiesButton", function (e){
+        let modal = $("#prioritiesModal");
+        modal.modal('show');
+    })
 });
 
 function shuffleArray(array) {

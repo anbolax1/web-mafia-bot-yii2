@@ -15,7 +15,7 @@ $hostAvatar = $host->avatar;
 </head>
 
 <div class="row" style="height: 80vh;">
-    <div class="col-md-6" style="padding:0; background: rgba(96, 96, 112 ,0.85); border-radius: 15px; box-shadow: 5px 5px 5px black; max-height: 100%;">
+    <div class="col-md-6" style="position:relative;padding:0; background: rgba(96, 96, 112 ,0.85); border-radius: 15px; box-shadow: 5px 5px 5px black; max-height: 100%;">
         <h2 class="game-settings-h2" style="border-top-left-radius: 15px 15px; border-top-right-radius: 15px 15px; ">
             <p style="margin: 0;">Ведущий -
                 <img id="hostAvatar" src="<?= $hostAvatar;?>" alt="Avatar" class="avatar">
@@ -35,9 +35,11 @@ $hostAvatar = $host->avatar;
                 <?php endforeach;?>
             </ol>
         </div>
-        <h2 id="shuffleMembersButton" class="game-settings-h2 game-start-h2" style="width:49.5%;border-top-right-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block">Перемешать</h2>
-        <h2 id="updateMembersButton" class="game-settings-h2 game-start-h2" style="width:49.5%;border-top-left-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block; float: right">Обновить</h2>
-
+        <div style="position: absolute;bottom: 0;display: flex;justify-content: space-between;flex-wrap: nowrap;width: 100%;">
+            <h2 id="shuffleMembersButton" class="game-settings-h2 game-start-h2" style="width:32%;border-top-right-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block">Перемешать</h2>
+            <h2 id="showPrioritiesButton" class="game-settings-h2 game-start-h2" style="width:32%;border-radius: 15px; display: inline-block">Приоритеты</h2>
+            <h2 id="updateMembersButton" class="game-settings-h2 game-start-h2" style="width:32%;border-top-left-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block; float: right">Обновить</h2>
+        </div>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-5" style="padding:0; background: rgba(96, 96, 112 ,0.85); border-radius: 15px; box-shadow: 5px 5px 5px black;">
@@ -69,5 +71,15 @@ $hostAvatar = $host->avatar;
             </div>
         </div>
         <h2 id="startGameButton" class="game-settings-h2 game-start-h2" style="border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px;"><span id="startGameSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>Начать игру</h2>
+    </div>
+</div>
+
+<div class="modal fade modal-sm" id="prioritiesModal" tabindex="-1" aria-labelledby="prioritiesModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+
+            </div>
+        </div>
     </div>
 </div>
