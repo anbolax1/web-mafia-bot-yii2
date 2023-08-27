@@ -115,8 +115,17 @@ class Game
             $hostChannel = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->channel_id;
             $channelMembers = ChannelMember::find()->where(['channel_id' => $hostChannel])->andWhere(['not in' , 'discord_id' , $gameMemberIds])->all();
             foreach ($channelMembers as $channelMember) {
+                if($channelMember->discord_id == $hostDiscordId) {
+                    try {
+                        Yii::$app->bot->changeUserNick($game->guild_id, $hostDiscordId, $channelMember->name, '!Вед');
+                    } catch (\Exception $e) {
+                        try {
+                            Yii::$app->bot->sendMessage($channelMember->discord_id, "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот '!Вед.'");
+                        } catch (\Exception $e) {}
+                    }
+                }
                 try {
-                    Yii::$app->bot->changeUserNick($game->guild_id, $channelMember->discord_id, $gameMember['name'], 'Зр');
+                    Yii::$app->bot->changeUserNick($game->guild_id, $channelMember->discord_id, $channelMember->name, 'Зр');
                 } catch (\Exception $e) {
                     try {
                         Yii::$app->bot->sendMessage($channelMember->discord_id, "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот 'Зр.'");
