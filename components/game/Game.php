@@ -123,6 +123,7 @@ class Game
                             Yii::$app->bot->sendMessage($channelMember->discord_id, "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот '!Вед.'");
                         } catch (\Exception $e) {}
                     }
+                    continue;
                 }
                 try {
                     Yii::$app->bot->changeUserNick($game->guild_id, $channelMember->discord_id, $channelMember->name, 'Зр');

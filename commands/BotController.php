@@ -72,9 +72,9 @@ class BotController extends Controller
                                 if($name[2] == '.'){
                                     $name = trim(substr($name, 3));
                                 }
-                                if($name[0] == '!' && $name[4] == '.'){
-                                    $name = trim(substr($name, 5));
-                                }
+                                $name = str_replace("!Вед.", '', $name);
+                                $name = str_replace("Зр.", '', $name);
+                                $name = trim($name);
 
 //                                file_put_contents('members.log', print_r(json_encode($name, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
                                 $channelMemberModel = new ChannelMember([
