@@ -60,7 +60,10 @@ class Game
             $hostDiscordId = $hostUser->discordId;
             $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
             $gameDatetime = date('d.m.Y H:i:s', $game->start_time);
+
+            $gameMemberIds = []; //массив discord_id участников игры
             foreach ($gameMembers as $gameMemberSlot => &$gameMember) {
+                $gameMemberIds[] = $gameMember['discord_id'];
                 //TODO убрать эту проверку
                /* if($gameMember['discord_id'] != '472399225460752400'){
                     continue;
@@ -89,7 +92,9 @@ class Game
                 try {
                     Yii::$app->bot->changeUserNick($game->guild_id, $gameMember['discord_id'], $gameMember['name'], $gameMember['slot']);
                 } catch (\Exception $e) {
-                    Yii::$app->bot->sendMessage($gameMember['discord_id'], "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот {$gameMember['slot']} и не забудь точку (пример - 01.)!");
+                    try {
+                        Yii::$app->bot->sendMessage($gameMember['discord_id'], "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот {$gameMember['slot']} и не забудь точку (пример - 01.)!");
+                    } catch (\Exception $e) {}
                 }
 
                 try {
@@ -104,6 +109,18 @@ class Game
                     Yii::$app->bot->sendEmbed($gameMember['discord_id'], $memberEmber);
                 } catch (\Exception $e) {
                     Yii::$app->bot->sendMessage($hostServerNick, sprintf("<@%s> не получил в ЛС свою роль. Напиши ему сам. Его роль - %s", $gameMember['discord_id'], \app\models\Game::getRoleInRus($gameMember['role'])));
+                }
+            }
+
+            $hostChannel = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->channel_id;
+            $channelMembers = ChannelMember::find()->where(['channel_id' => $hostChannel])->andWhere(['not in' , 'discord_id' , $gameMemberIds])->all();
+            foreach ($channelMembers as $channelMember) {
+                try {
+                    Yii::$app->bot->changeUserNick($game->guild_id, $channelMember->discord_id, $gameMember['name'], 'Зр');
+                } catch (\Exception $e) {
+                    try {
+                        Yii::$app->bot->sendMessage($channelMember->discord_id, "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот 'Зр.'");
+                    } catch (\Exception $e) {}
                 }
             }
 
