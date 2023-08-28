@@ -4,6 +4,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $dataProvider yii\data\ActiveDataProvider */
+date_default_timezone_set("Europe/Moscow");
 
 $this->title = 'Главная';
 
