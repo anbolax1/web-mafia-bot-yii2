@@ -217,7 +217,10 @@ class Game extends \yii\db\ActiveRecord
 
     public function getStartTime()
     {
-        return gmdate("d.m.Y H:i:s", $this->start_time);
+        $dt = new \DateTime($this->start_time);
+        $dt->setTimezone(new \DateTimeZone('Europe/Moscow'));
+        return $dt->format("d.m.Y H:i:s");
+//        return gmdate("d.m.Y H:i:s", $this->start_time);
     }
 
     public function getEndTime()
@@ -225,7 +228,10 @@ class Game extends \yii\db\ActiveRecord
         if(empty($this->end_time)){
             return '';
         }
-        return gmdate("d.m.Y H:i:s", $this->end_time);
+        $dt = new \DateTime($this->end_time);
+        $dt->setTimezone(new \DateTimeZone('Europe/Moscow'));
+        return $dt->format("d.m.Y H:i:s");
+//        return gmdate("d.m.Y H:i:s", $this->end_time);
     }
 
     /**
