@@ -11,6 +11,7 @@ use Yii;
  * @property string $discord_id
  * @property string|null $name
  * @property string|null $avatar
+ * @property string|null $self_video включена ли вебка участника канала
  * @property int $channel_id
  * @property string|null $flag
  *
@@ -34,7 +35,7 @@ class ChannelMember extends \yii\db\ActiveRecord
         return [
             [['discord_id', 'channel_id'], 'required'],
             [['channel_id'], 'integer'],
-            [['discord_id', 'name', 'avatar', 'flag'], 'string', 'max' => 255],
+            [['discord_id', 'name', 'avatar', 'self_video', 'flag'], 'string', 'max' => 255],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => VoiceChannel::class, 'targetAttribute' => ['channel_id' => 'id']],
         ];
     }

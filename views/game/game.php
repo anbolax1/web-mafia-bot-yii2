@@ -23,6 +23,7 @@ $gameSeconds = time() - $gameStartTime;
 <div id="techFields" style="display: none">
     <span id="gameId"><?= $game->id; ?></span>
     <span id="gameSeconds"><?= $gameSeconds ?></span>
+    <span id="gameFoulsCount"><?= $foulsCount ?></span>
 </div>
 
 <div id="gameBlock" class="row" style="">
@@ -58,8 +59,12 @@ $gameSeconds = time() - $gameStartTime;
             </div>
         </div>
         <div id="membersBlock">
-            <?php foreach ($gameMembers as $gameMember): ?>
-                <p class="member-row" discord_id="<?= $gameMember->discord_id;?>">
+            <?php foreach ($gameMembers as $gameMember):
+                    unset($memberResult, $memberFoulsCount);
+                    $memberResult = json_decode($gameMember->result, true);
+                    $memberFoulsCount = !empty($memberResult) && !empty($memberResult['fouls_count']) ? $memberResult['fouls_count'] : 0;
+                ?>
+                <p class="member-row <?php echo !empty($memberResult) ? 'opacity03' : '';?>" discord_id="<?= $gameMember->discord_id;?>">
                     <span class="member-name">
                         <span class="member-slot" slot="<?= $gameMember->slot ?>"><?= $gameMember->slot ?>.</span>
                         <img src="<?= $gameMember->avatar;?>" alt="Avatar" class="avatar">
@@ -67,7 +72,7 @@ $gameSeconds = time() - $gameStartTime;
                     </span>
                     <span class="fouls-list">
                         <?php for ($i = 1; $i <= $foulsCount; $i++): ?>
-                            <span id="<?= $i; ?>" class="foul"><?= $i; ?></span>
+                            <span id="<?= $i; ?>" class="foul <?php echo $i <= $memberFoulsCount ? 'on-vote' : '';?>"><?= $i; ?></span>
                         <?php endfor; ?>
                     </span>
                     <?php if($gameSettings['withExtraTime'] == 'true'): ?>
@@ -76,6 +81,8 @@ $gameSeconds = time() - $gameStartTime;
                     <span class="delete-member">
                         X
                     </span>
+                    <span class="member-button" style="width: auto;">Открывал стол?</span>
+                    <span id="isSkippedSpeech" class="member-button" style="width: auto; display: none;">Пропускал речь?</span>
                 </p>
             <?php endforeach; ?>
         </div>

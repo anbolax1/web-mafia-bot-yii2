@@ -64,7 +64,6 @@ class Game
             $gameMemberIds = []; //массив discord_id участников игры
             foreach ($gameMembers as $gameMemberSlot => &$gameMember) {
                 $gameMemberIds[] = $gameMember['discord_id'];
-                //TODO убрать эту проверку
                /* if($gameMember['discord_id'] != '472399225460752400'){
                     continue;
                 }*/
@@ -208,7 +207,6 @@ class Game
                     ],
                     'color' => '15724534' // Цвет в десятичном формате hex (пр. ff0000 -> 16711680)
                 ];
-                //TODO убрать проверку
                 /*if($gameMember->discord_id != 162954416528293889) {
                     continue;
                 }*/

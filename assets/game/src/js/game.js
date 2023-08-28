@@ -79,6 +79,9 @@ $( document ).ready(function() {
             $(p).find($("span#name")).css('opacity', '1');
             $(p).find($("span#deleteMember")).text('X');
         }
+
+        $("span#membersCount").text($("li.member").length);
+        $("span#membersCount").trigger('change');
     })
 
     $(document).on("click", "#updateMembersButton", function (e){
@@ -87,6 +90,11 @@ $( document ).ready(function() {
     })
 
     $(document).on("click", "#startGameButton", function (e){
+        let membersCount = $("span#membersCount").text();
+        if(membersCount !== 10){
+            alert("Игроков должно быть ровно 10!");
+            return;
+        }
         $("#startGameSpinner").show();
         let membersArray = [];
         let settingArray = [];
@@ -198,6 +206,14 @@ $( document ).ready(function() {
         }
     })
 
+    $(document).on("click", "span.member-button", function (e){
+        if($(this).hasClass('on-vote')){
+            $(this).removeClass('on-vote');
+        } else {
+            $(this).addClass('on-vote');
+        }
+    })
+
     $(document).on("click", "span#clearMembersOnVote", function (e){
         $("span#membersOnVoteSpan").empty();
         $("span.member-name").removeClass('on-vote');
@@ -209,6 +225,7 @@ $( document ).ready(function() {
         let currentFoul = $(e.currentTarget);
         let currentFoulList = $(currentFoul).parent($("span.fouls-list")).find($("span.foul"));
         let foulNumber = $(this).text();
+        let p = $(currentFoul).parent($("span.fouls-list")).parent($("p.member-row"));
 
         if($(currentFoul).hasClass('on-vote')){
             $(currentFoulList).each(function (index){
@@ -222,6 +239,17 @@ $( document ).ready(function() {
                     $(this).addClass('on-vote');
                 }
             })
+        }
+
+        //при обновлении фола проверяем, должен ли игрок пропускать речь.
+        //если да, тогда отображаем кнопку-флаг пропуска речи
+        let currentMemberFouls = $(currentFoul).parent($("span.fouls-list")).find($("span.foul.on-vote")).length;
+        let gameFoulsCount = $("div#techFields > span#gameFoulsCount").text();
+        let isSkippedSpeechSpan = $(p).find($("span#isSkippedSpeech"));
+        if(parseInt(currentMemberFouls) === gameFoulsCount - 1) {
+            $(isSkippedSpeechSpan).show();
+        } else {
+            $(isSkippedSpeechSpan).hide();
         }
     })
 
@@ -412,10 +440,32 @@ $( document ).ready(function() {
     })
 
     $(document).on("click", "#showPrioritiesButton", function (e){
+        //TODO показывать приоритеты
         let modal = $("#prioritiesModal");
         modal.modal('show');
     })
+
+    $(document).on("click", "#showOnlyWithSelfVideoButton", function (e){
+        if($("li.potential-member.without-self-video").is(":hidden")){
+            $("li.potential-member.without-self-video").addClass('member').show();
+        } else {
+            $("li.potential-member.without-self-video").removeClass('member').hide();
+        }
+        $("span#membersCount").text($("li.member").length);
+
+        $("span#membersCount").trigger('change');
+    })
+
+    $(document).on("change", "span#membersCount", function (e){
+        if($(e.currentTarget).text() === '10') {
+            $(e.currentTarget).css('color', 'green');
+        } else {
+            $(e.currentTarget).css('color', 'red');
+        }
+    })
 });
+
+
 
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {

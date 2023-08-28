@@ -147,7 +147,7 @@ span#plus30 {
     user-select: none;
 }
 
-span.member-name, span.fouls-list {
+span.member-name, span.fouls-list, span.member-button {
     background: rgba(62, 61, 75, 0.85);
     border-radius: 10px;
     margin-left: 0.25em;
@@ -517,4 +517,16 @@ span.member-change-rating {
     --bs-spinner-border-width: 0.2em;
 }
 
+/* Подсвечиваем при наведении */
+span.foul:hover,
+span.member-name:hover,
+span.member-button:hover,
+span.delete-member:hover,
+span.the-best-move-member:hover,
+div#deleteMemberReasonModal > span:hover,
+span.finish-game:hover,
+span#sendTheBestMove:hover
+ {
+    background-color: grey !important;
+}
 

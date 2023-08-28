@@ -24,8 +24,10 @@ $hostAvatar = $host->avatar;
         </h2>
         <div style="height:86%; color: whitesmoke; font-size: 1.6em; overflow: auto; padding-left: 0.5em;">
             <ol id="membersList">
-                <?php foreach ($members as $member):?>
-                <li class="member">
+                <?php foreach ($members as $member):
+                        $selfVideoClass = $member->self_video == 'true' ? 'with-self-video' : 'without-self-video';
+                ?>
+                <li class="potential-member member <?= $selfVideoClass; ?>">
                     <p id="member" discord_id="<?=$member->discord_id; ?>">
                         <img src="<?= $member->avatar;?>" alt="Avatar" class="avatar">
                         <span id="name"><?= $member->name;?></span>
@@ -35,10 +37,11 @@ $hostAvatar = $host->avatar;
                 <?php endforeach;?>
             </ol>
         </div>
-        <div style="position: absolute;bottom: 0;display: flex;justify-content: space-between;flex-wrap: nowrap;width: 100%;">
-            <h2 id="shuffleMembersButton" class="game-settings-h2 game-start-h2" style="width:32%;border-top-right-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block">Перемешать</h2>
-            <h2 id="showPrioritiesButton" class="game-settings-h2 game-start-h2" style="width:32%;border-radius: 15px; display: inline-block">Приоритеты</h2>
-            <h2 id="updateMembersButton" class="game-settings-h2 game-start-h2" style="width:32%;border-top-left-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block; float: right">Обновить</h2>
+        <div style="position: absolute;bottom: 0;display: flex;justify-content: space-between;flex-wrap: nowrap;align-items: flex-end;width: 100%;">
+            <h2 id="shuffleMembersButton" class="game-settings-h2 game-start-h2" style="font-size:1.4em; width:24%;border-top-right-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block">Перемешать</h2>
+            <h2 id="showOnlyWithSelfVideoButton" class="game-settings-h2 game-start-h2" style="font-size:1.4em; width:24%;border-radius: 15px; display: inline-block">Вебки</h2>
+            <h2 id="showPrioritiesButton" class="game-settings-h2 game-start-h2" style="font-size:1.4em; width:24%;border-radius: 15px; display: inline-block">Приоритеты</h2>
+            <h2 id="updateMembersButton" class="game-settings-h2 game-start-h2" style="font-size:1.4em; width:24%;border-top-left-radius: 15px 15px;border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px; display: inline-block; float: right">Обновить</h2>
         </div>
     </div>
     <div class="col-md-1"></div>
@@ -70,7 +73,7 @@ $hostAvatar = $host->avatar;
                 </div>
             </div>
         </div>
-        <h2 id="startGameButton" class="game-settings-h2 game-start-h2" style="border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px;"><span id="startGameSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>Начать игру</h2>
+        <h2 id="startGameButton" class="game-settings-h2 game-start-h2" style="border-bottom-left-radius: 15px 15px; border-bottom-right-radius: 15px 15px;"><span id="startGameSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>Начать игру (Игроков: <span id="membersCount" style="color: <?php echo count($members) == 10 ? 'green' : 'red'; ?>"><?= count($members);?></span>)</h2>
     </div>
 </div>
 

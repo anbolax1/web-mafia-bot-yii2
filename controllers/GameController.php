@@ -255,11 +255,12 @@ class GameController extends Controller
                 throw new \Exception("Игра (id = {$post['gameId']}) не найдена в базе!");
             }
 
-            $result = Yii::$app->Game->finishGame($game, $post);
 
             if($post['finishType'] == 'canceled') {
+                $game->updateAttributes(['status' => Game::GAME_CANCELED]);
                 return $this->render('starting');
             } else {
+                $result = Yii::$app->Game->finishGame($game, $post);
                 return $this->render('finish', ['game' => $game]);
             }
         } catch (\Exception $e) {
