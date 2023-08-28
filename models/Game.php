@@ -217,20 +217,20 @@ class Game extends \yii\db\ActiveRecord
 
     public function getStartTime()
     {
-        $dt = new \DateTime($this->start_time);
-        $dt->setTimezone(new \DateTimeZone('Europe/Moscow'));
-        return $dt->format("d.m.Y H:i:s");
+        date_default_timezone_set("Europe/Moscow");
+
+        return date('d.m.Y H:i:s', $this->start_time);
 //        return gmdate("d.m.Y H:i:s", $this->start_time);
     }
 
     public function getEndTime()
     {
+        date_default_timezone_set("Europe/Moscow");
+
         if(empty($this->end_time)){
             return '';
         }
-        $dt = new \DateTime($this->end_time);
-        $dt->setTimezone(new \DateTimeZone('Europe/Moscow'));
-        return $dt->format("d.m.Y H:i:s");
+        return date('d.m.Y H:i:s', $this->end_time);
 //        return gmdate("d.m.Y H:i:s", $this->end_time);
     }
 
