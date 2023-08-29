@@ -91,10 +91,10 @@ $( document ).ready(function() {
 
     $(document).on("click", "#startGameButton", function (e){
         let membersCount = $("span#membersCount").text();
-        if(membersCount !== 10){
+        /*if(membersCount !== 10){
             alert("Игроков должно быть ровно 10!");
             return;
-        }
+        }*/
         $("#startGameSpinner").show();
         let membersArray = [];
         let settingArray = [];
