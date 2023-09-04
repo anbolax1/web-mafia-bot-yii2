@@ -107,7 +107,7 @@ class Game
                     ];
                     Yii::$app->bot->sendEmbed($gameMember['discord_id'], $memberEmber);
                 } catch (\Exception $e) {
-                    Yii::$app->bot->sendMessage($hostServerNick, sprintf("<@%s> не получил в ЛС свою роль. Напиши ему сам. Его роль - %s", $gameMember['discord_id'], \app\models\Game::getRoleInRus($gameMember['role'])));
+                    Yii::$app->bot->sendMessage($hostDiscordId, sprintf("<@%s> не получил в ЛС свою роль. Напиши ему сам. Его роль - %s", $gameMember['discord_id'], \app\models\Game::getRoleInRus($gameMember['role'])));
                 }
             }
 
@@ -327,7 +327,7 @@ class Game
             ЛХ: 3/3 +3
             Поднялся по фолам или тех. причине: -3 */
             $memberResult = json_decode($gameMember->result, true);
-            $theBestMoveChange = isset($memberResult['the_best_move']['right_count']) ?? 0;
+            $theBestMoveChange = isset($memberResult['the_best_move']['right_count']) ? intval($memberResult['the_best_move']['right_count']) : 0;
 
             $isMemberWin = $this->isMemberWin($gameMember, $memberGames[0]);
             if($isMemberWin) {
@@ -387,7 +387,7 @@ class Game
             ЛХ: 3/3 +3
             Поднялся по фолам или тех. причине: -3 */
             $memberResult = json_decode($gameMember->result, true);
-            $theBestMoveChange = isset($memberResult['the_best_move']['right_count']) ?? 0;
+            $theBestMoveChange = isset($memberResult['the_best_move']['right_count']) ? intval($memberResult['the_best_move']['right_count']) : 0;
 
             $isMemberWin = $this->isMemberWin($gameMember, $memberGames[0]);
             if($isMemberWin) {
