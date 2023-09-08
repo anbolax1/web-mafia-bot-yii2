@@ -8,7 +8,7 @@ GameAsset::register($this);
 
 //$game = \app\models\Game::find()->where(['id' => 13])->one();
 $gameStartTimestamp = $game->start_time;
-$gameEndTimestamp = $game->end_time;
+$gameEndTimestamp = !empty($game->end_time) ? $game->end_time : time();
 
 $gameSettings = Yii::$app->Game->getGameSettings($game);
 $gameMembers = \app\models\GameMember::find()->where(['game_id' => $game->id])->all();
