@@ -183,10 +183,13 @@ class Game
             $hostEmbedText = '';
             foreach ($gameMembers as $gameMember) {
                 $memberRating = MemberRating::find()->where(['discord_id' => $gameMember->discord_id, 'type' => MemberRating::RATING_GENERAL])->one()->rating;
-                $memberRatingChange = MemberRatingHistory::find()->where(['game_id' => $game->id, 'discord_id' => $gameMember->discord_id])->one()->change_rating;
-                $memberRatingChange = intval($memberRatingChange) < 0 ? $memberRatingChange : '+'.$memberRatingChange;
 
-
+                if($gameSettings['isRating'] == 'true') {
+                    $memberRatingChange = MemberRatingHistory::find()->where(['game_id' => $game->id, 'discord_id' => $gameMember->discord_id])->one()->change_rating;
+                    $memberRatingChange = intval($memberRatingChange) < 0 ? $memberRatingChange : '+'.$memberRatingChange;
+                } else {
+                    $memberRatingChange = 0;
+                }
 
                 $isMemberWin = \app\models\Game::isMemberWin($game->win_role, $gameMember->role);
                 if($isMemberWin) {
