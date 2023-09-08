@@ -19,7 +19,7 @@ $hostAvatar = $host->avatar;
         <h2 class="game-settings-h2" style="border-top-left-radius: 15px 15px; border-top-right-radius: 15px 15px; ">
             <p style="margin: 0;">Ведущий -
                 <img id="hostAvatar" src="<?= $hostAvatar;?>" alt="Avatar" class="avatar">
-                <span id="hostName"><?= $host->username ?></span>
+                <span id="hostName"><?= $host->name ?></span>
             </p>
         </h2>
         <div style="height:86%; color: whitesmoke; font-size: 1.6em; overflow: auto; padding-left: 0.5em;">

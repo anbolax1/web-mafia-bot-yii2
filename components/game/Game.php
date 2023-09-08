@@ -190,6 +190,7 @@ class Game
                     $memberRating = 0;
                 }
 
+                //TODO подправить
                 if($gameSettings['isRating'] == 'true') {
 //                    $memberRating = MemberRating::find()->where(['discord_id' => $gameMember->discord_id, 'type' => MemberRating::RATING_GENERAL])->one()->rating;
                     $memberRatingChange = MemberRatingHistory::find()->where(['game_id' => $game->id, 'discord_id' => $gameMember->discord_id])->one()->change_rating;
