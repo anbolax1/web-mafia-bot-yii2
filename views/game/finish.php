@@ -27,9 +27,15 @@ $gameHistory = \app\models\GameHistory::find()->where(['game_id' => $game->id])-
 <div id="finishGameBlock" class="row" style="height: 80vh;">
     <div id="memberRolesBlock">
         <h2 class="game-settings-h2" style="border-top-left-radius: 15px 15px; border-top-right-radius: 15px 15px; ">
-            <p style="margin: 0;">Победа
-                <span id="winRoleSpan"><?= $winRole ?></span>
-            </p>
+            <?php if(!empty($game->win_role)): ?>
+                <p style="margin: 0;">Победа
+                    <span id="winRoleSpan"><?= $winRole ?></span>
+                </p>
+            <?php else: ?>
+                <p style="margin: 0;">Игра в процессе
+                </p>
+            <?php endif; ?>
+
         </h2>
         <div id="memberRoles">
             <?php foreach ($gameMembers as $gameMember): ?>
@@ -55,7 +61,11 @@ $gameHistory = \app\models\GameHistory::find()->where(['game_id' => $game->id])-
                         <img src="<?= $gameMember->avatar;?>" alt="Avatar" class="avatar">
                         <span><?= $gameMember->name ?></span>
                     </span>
-                    <span class="finish-member-name" style="width: 40%;"><?= \app\models\Game::getRoleInRus($gameMember->role); ?></span>
+                    <?php if(!empty($game->win_role)): ?>
+                        <span class="finish-member-name" style="width: 40%;"><?= \app\models\Game::getRoleInRus($gameMember->role); ?></span>
+                    <?php else: ?>
+                        <span class="finish-member-name" style="width: 40%;">Роль скрыта</span>
+                    <?php endif; ?>
                     <?php if($gameSettings['isRating'] == 'true'): ?>
                     <span class="finish-member-name member-change-rating <?= $ratingSpanClass; ?>" style="margin-right: 0.2em;"><?= strval($changeRating) ?></span>
                     <?php endif; ?>
