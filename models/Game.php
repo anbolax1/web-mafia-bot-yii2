@@ -85,6 +85,9 @@ class Game extends \yii\db\ActiveRecord
 
         $dataProvider = new ActiveDataProvider([
                'query' => $query,
+               'pagination' => [
+                   'pageSize' => 10,
+               ],
                'sort' => $this->sortField()
            ]);
 
