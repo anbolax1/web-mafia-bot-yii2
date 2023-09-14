@@ -89,16 +89,6 @@ class Game extends \yii\db\ActiveRecord
                    'pageSize' => 10,
                ],
                'sort' => $this->sortField(),
-                'pager' => [
-                    'firstPageLabel' => '<i class="bi bi-chevron-bar-left"></i>',
-                    'prevPageLabel' => '<i class="bi bi-chevron-left"></i>',
-                    'nextPageLabel' => '<i class="bi bi-chevron-right"></i>',
-                    'lastPageLabel' => '<i class="bi bi-chevron-bar-right"></i>',
-                    'linkContainerOptions' => ['class' => 'page-item'],
-                    'linkOptions' => ['class' => 'page-link'],
-                    'disabledPageCssClass' => ['class' => 'page-link'],
-                    'options' => ['class' => 'pagination  pagination-sm']
-                ]
            ]);
 
         $this->load($data);
