@@ -36,7 +36,7 @@ class Game extends \yii\db\ActiveRecord
     const REASON_VOTED = 'voted';
     const REASON_KILLED = 'killed';
     const REASON_FOULED = 'fouled';
-    const REASON_TECH = 'tech_reason';
+    const REASON_TECH = 'techReason';
 
     const KILLED_FIRST = 'killed_first';
 
