@@ -88,7 +88,11 @@ $gameHistory = \app\models\GameHistory::find()->where(['game_id' => $game->id])-
                         <img src="<?= $gameMembersArray[$gameHistoryItem->member_discord_id]['avatar'];?>" alt="Avatar" class="avatar">
                         <span><?= $gameMembersArray[$gameHistoryItem->member_discord_id]['name'] ?></span>
                     </span>
+                    <?php if(!empty($game->win_role)): ?>
                     <span class="finish-member-name" style="width: 40%;"><?= \app\models\Game::getRoleInRus($gameMembersArray[$gameHistoryItem->member_discord_id]['role']); ?></span>
+                    <?php else: ?>
+                    <span class="finish-member-name" style="width: 40%;">Роль скрыта</span>
+                    <?php endif; ?>
                     <span class="finish-member-name" style="width: 40%;"><?= \app\models\Game::getGameActionDescription($gameHistoryItem->description); ?></span>
                     <span class="finish-member-name" style="width: 40%;"><?= gmdate("H:i:s", $gameHistoryItem->time - $gameStartTimestamp) ?></span>
                 </p>
