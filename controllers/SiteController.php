@@ -70,9 +70,28 @@ class SiteController extends Controller
         $categoryId = 803807947532009473;
 
         $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, 'игра istwood100');
-        $threadId = Yii::$app->bot->createThread($channelId, 'мафия');
+        $threadId = Yii::$app->bot->createThread($channelId, 'ветка 1');
+        $threadId2 = Yii::$app->bot->createThread($channelId, 'ветка 2');
+        $threadId3 = Yii::$app->bot->createThread($channelId, 'ветка 3');
 
-        $result = Yii::$app->bot->inviteUserToThread($threadId, 162954416528293889);*/
+        $result = Yii::$app->bot->inviteUserToThread($threadId, 162954416528293889);
+        $result = Yii::$app->bot->inviteUserToThread($threadId, 265322977732722688);
+        $result = Yii::$app->bot->inviteUserToThread($threadId, 314102544219635715);
+        $result = Yii::$app->bot->inviteUserToThread($threadId, 384737787976613899);
+        $result = Yii::$app->bot->inviteUserToThread($threadId, 409771772607725578);
+        sleep(3);
+        $result = Yii::$app->bot->inviteUserToThread($threadId2, 162954416528293889);
+        $result = Yii::$app->bot->inviteUserToThread($threadId2, 505834804713881612);
+        $result = Yii::$app->bot->inviteUserToThread($threadId2, 535106333528293416);
+        $result = Yii::$app->bot->inviteUserToThread($threadId2, 695728570894647426);
+        $result = Yii::$app->bot->inviteUserToThread($threadId2, 994934004857982987);
+        sleep(3);
+        $result = Yii::$app->bot->inviteUserToThread($threadId3, 162954416528293889);
+        $result = Yii::$app->bot->inviteUserToThread($threadId3, 505834804713881612);
+        $result = Yii::$app->bot->inviteUserToThread($threadId3, 535106333528293416);
+        $result = Yii::$app->bot->inviteUserToThread($threadId3, 695728570894647426);
+        $result = Yii::$app->bot->inviteUserToThread($threadId3, 994934004857982987);*/
+
 
         $gameModel = new Game();
         $dataProvider = $gameModel->getGames(Yii::$app->request->queryParams);

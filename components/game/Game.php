@@ -32,14 +32,14 @@ class Game
             //TODO вынести категорию в настройки сервера
             $categoryId = 803807947532009473;
 
-//            $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, "игра {$hostServerNick}");
+            $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, "игра {$hostServerNick}");
 
             $game = new \app\models\Game([
                 'host_id' => $hostUser->getId(),
                 'guild_id' => $guildId,
                 'status' => \app\models\Game::GAME_IN_PROCESS,
                 'start_time' => strval(time()),
-//                'channel_id' => strval($channelId)
+                'channel_id' => strval($channelId)
             ]);
             if(!$game->save()){
                 throw new \Exception('Игра не сохранена в базу!');
@@ -123,8 +123,9 @@ class Game
             }
 
             $hostChannel = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->channel_id;
+            //ставим слот ведущего и зрителя
             $channelMembers = ChannelMember::find()->where(['channel_id' => $hostChannel])->andWhere(['not in' , 'discord_id' , $gameMemberIds])->all();
-            foreach ($channelMembers as $channelMember) {
+            /*foreach ($channelMembers as $channelMember) {
                 if($channelMember->discord_id == $hostDiscordId) {
                     try {
                         Yii::$app->bot->changeUserNick($game->guild_id, $hostDiscordId, $channelMember->name, '!Вед');
@@ -142,7 +143,7 @@ class Game
                         Yii::$app->bot->sendMessage($channelMember->discord_id, "Я не смог поменять тебе ник. Пожалуйста, поставь перед ником слот 'Зр.'");
                     } catch (\Exception $e) {}
                 }
-            }
+            }*/
 
             // отправляем ведущему список игроков и ролей
             $embed = [
@@ -164,9 +165,11 @@ class Game
             $sheriffThreadId = Yii::$app->bot->createThread($channelId, 'комиссар');
 
             //приглашаем ведущего во все ветки
-            /*$result = Yii::$app->bot->inviteUserToThread($mafThreadId, $hostDiscordId);
+            $result = Yii::$app->bot->inviteUserToThread($mafThreadId, $hostDiscordId);
             $result = Yii::$app->bot->inviteUserToThread($donThreadId, $hostDiscordId);
             $result = Yii::$app->bot->inviteUserToThread($sheriffThreadId, $hostDiscordId);
+
+            sleep(3);
 
             unset($gameMember);
             foreach ($gameMembers as $gameMember) {
@@ -176,11 +179,12 @@ class Game
                 if($gameMember['role'] == \app\models\Game::ROLE_DON) {
                     $result = Yii::$app->bot->inviteUserToThread($mafThreadId, $gameMember['discord_id']);
                     $result = Yii::$app->bot->inviteUserToThread($donThreadId, $gameMember['discord_id']);
+                    sleep(3);
                 }
                 if($gameMember['role'] == \app\models\Game::ROLE_SHERIFF) {
                     $result = Yii::$app->bot->inviteUserToThread($sheriffThreadId, $gameMember['discord_id']);
                 }
-            }*/
+            }
 
 //            return [$game, $gameMembers];
             return $game;
