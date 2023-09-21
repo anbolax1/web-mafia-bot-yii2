@@ -3,9 +3,11 @@
 namespace app\controllers;
 
 use app\models\Game;
+use app\models\Guild;
 use app\models\User;
 use Yii;
 use yii\base\BaseObject;
+use yii\console\ExitCode;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -64,6 +66,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+/*        $guildId = 803807947066703883;
+        $categoryId = 803807947532009473;
+
+        $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, 'игра istwood100');
+        $threadId = Yii::$app->bot->createThread($channelId, 'мафия');
+
+        $result = Yii::$app->bot->inviteUserToThread($threadId, 162954416528293889);*/
+
         $gameModel = new Game();
         $dataProvider = $gameModel->getGames(Yii::$app->request->queryParams);
         $games = Game::find()->where(['<>', 'status', Game::GAME_CANCELED]);

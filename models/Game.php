@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
  * @property string|null $win_role кто победил
  * @property string|null $start_time
  * @property string|null $end_time
+ * @property string|null $channel_id идентификатор тексового канала игры
  *
  * @property GameMember[] $gameMembers
  * @property GameSetting[] $gameSettings
@@ -58,7 +59,7 @@ class Game extends \yii\db\ActiveRecord
         return [
             [['host_id', 'guild_id', 'status'], 'required'],
             [['host_id'], 'integer'],
-            [['guild_id', 'status', 'win_role', 'start_time', 'end_time'], 'string', 'max' => 255],
+            [['guild_id', 'status', 'win_role', 'start_time', 'end_time', 'channel_id'], 'string', 'max' => 255],
             [['host_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['host_id' => 'id']],
         ];
     }

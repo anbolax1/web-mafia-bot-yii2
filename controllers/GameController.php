@@ -257,6 +257,10 @@ class GameController extends Controller
 
 
             if($post['finishType'] == 'canceled') {
+                $channelId = $game->channel_id;
+                if(!empty($channelId)){
+                    Yii::$app->bot->deleteChannel($channelId);
+                }
                 $game->updateAttributes(['status' => Game::GAME_CANCELED]);
                 return $this->render('starting');
             } else {

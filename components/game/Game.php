@@ -23,11 +23,23 @@ class Game
             $transaction = Yii::$app->db->beginTransaction();
 
             $hostUser = Yii::$app->user->getIdentity();
+            $hostDiscordId = $hostUser->discordId;
+            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
+
+            $guildId = $this->getGuildId($hostUser);
+
+            //создаём текстовый канал игры
+            //TODO вынести категорию в настройки сервера
+            $categoryId = 803807947532009473;
+
+            $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, "игра {$hostServerNick}");
+
             $game = new \app\models\Game([
                 'host_id' => $hostUser->getId(),
-                'guild_id' => $this->getGuildId($hostUser),
+                'guild_id' => $guildId,
                 'status' => \app\models\Game::GAME_IN_PROCESS,
-                'start_time' => strval(time())
+                'start_time' => strval(time()),
+                'channel_id' => strval($channelId)
             ]);
             if(!$game->save()){
                 throw new \Exception('Игра не сохранена в базу!');
@@ -57,8 +69,7 @@ class Game
             shuffle($roles);
 
             $embedText = '';
-            $hostDiscordId = $hostUser->discordId;
-            $hostServerNick = ChannelMember::find()->where(['discord_id' => $hostDiscordId])->one()->name;
+
             $gameDatetime = date('d.m.Y H:i:s', $game->start_time);
 
             $gameMemberIds = []; //массив discord_id участников игры
@@ -145,6 +156,32 @@ class Game
 
             Yii::$app->bot->sendEmbed($hostDiscordId, $embed);
             $transaction->commit();
+
+            //создаём ветки для ролей
+
+            $mafThreadId = Yii::$app->bot->createThread($channelId, 'мафия');
+            $donThreadId = Yii::$app->bot->createThread($channelId, 'дон');
+            $sheriffThreadId = Yii::$app->bot->createThread($channelId, 'комиссар');
+
+            //приглашаем ведущего во все ветки
+            $result = Yii::$app->bot->inviteUserToThread($mafThreadId, $hostDiscordId);
+            $result = Yii::$app->bot->inviteUserToThread($donThreadId, $hostDiscordId);
+            $result = Yii::$app->bot->inviteUserToThread($sheriffThreadId, $hostDiscordId);
+
+            unset($gameMember);
+            foreach ($gameMembers as $gameMember) {
+                if($gameMember['role'] == \app\models\Game::ROLE_MAF) {
+                    $result = Yii::$app->bot->inviteUserToThread($mafThreadId, $gameMember['discord_id']);
+                }
+                if($gameMember['role'] == \app\models\Game::ROLE_DON) {
+                    $result = Yii::$app->bot->inviteUserToThread($mafThreadId, $gameMember['discord_id']);
+                    $result = Yii::$app->bot->inviteUserToThread($donThreadId, $gameMember['discord_id']);
+                }
+                if($gameMember['role'] == \app\models\Game::ROLE_SHERIFF) {
+                    $result = Yii::$app->bot->inviteUserToThread($sheriffThreadId, $gameMember['discord_id']);
+                }
+            }
+
 //            return [$game, $gameMembers];
             return $game;
         } catch (\Exception $e) {
@@ -170,6 +207,11 @@ class Game
 
             $game->updateAttributes(['status' => $gameStatus,'end_time' => strval(time()), 'win_role' => $winRole]);
 
+            $channelId = $game->channel_id;
+            if(!empty($channelId)){
+                Yii::$app->bot->deleteChannel($channelId);
+            }
+
             $gameSettings = Yii::$app->Game->getGameSettings($game);
 
             if($gameSettings['isRating'] == 'true'){
@@ -181,6 +223,7 @@ class Game
 
             $gameMembers = GameMember::find()->where(['game_id' => $game->id])->all();
             $hostEmbedText = '';
+            /** @var $gameMember GameMember */
             foreach ($gameMembers as $gameMember) {
 
                 $memberRating = MemberRating::find()->where(['discord_id' => $gameMember->discord_id, 'type' => MemberRating::RATING_GENERAL])->one();
