@@ -66,7 +66,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-/*        $guildId = 803807947066703883;
+        /*$guildId = 803807947066703883;
         $categoryId = 803807947532009473;
 
         $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, 'игра istwood100');
