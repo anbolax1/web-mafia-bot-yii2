@@ -2,6 +2,6 @@
 .env.prod
 vendor
 .idea
-members.log
+*.log
 config/db.php
 docker/nginx/conf/default.conf

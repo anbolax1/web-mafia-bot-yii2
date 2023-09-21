@@ -7,6 +7,7 @@ use app\models\ChannelMember;
 use app\models\Guild;
 use app\models\Meta;
 use app\models\VoiceChannel;
+use Discord\Builders\MessageBuilder;
 use Discord\Parts\Channel\Channel;
 use Yii;
 use yii\base\BaseObject;
@@ -102,4 +103,61 @@ class BotController extends Controller
             }
         });
     }
+
+    /*public function actionStart()
+    {
+        try {
+            $token = env('BOT_TOKEN');
+            $discord = new Discord(
+                [
+                    'token' => $token
+                ]
+            );
+            $discord->on('ready', function ($discord) {
+                echo "Bot is ready!", PHP_EOL;
+
+                $discord->on('message', function (Message $message, Discord $discord) {
+                    file_put_contents('message.log', print_r(json_encode($message, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
+                    if (!$message->author->bot) {
+                        if (strpos($message->content, '!') === 0) {
+                            $command = substr($message->content, 1);
+
+                            switch ($command) {
+                                case 'members':
+                                    // Проверяем, что автор сообщения находится в голосовом канале
+                                    if ($message->author->voiceChannel) {
+                                        $voiceChannel = $message->author->voiceChannel;
+                                        file_put_contents('message.log', print_r(json_encode($voiceChannel, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
+                                        $members = $voiceChannel->getMembers();
+
+                                        $response = "Участники голосового канала:\n";
+                                        foreach ($members as $member) {
+                                            $response .= "- {$member->username}\n";
+                                        }
+                                    } else {
+                                        $response = "Вы не находитесь в голосовом канале.";
+                                    }
+                                    echo $response;
+                                    break;
+                                default:
+                                    $response = "Unknown command: {$command}";
+                                    break;
+                            }
+
+                            $builder = new MessageBuilder($discord);
+                            $builder->setContent($response);
+                            $message->channel->sendMessage($builder);
+                        }
+                    }
+                });
+            });
+
+            $discord->run();
+
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return ExitCode::OK;
+        }
+    }*/
 }
