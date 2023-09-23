@@ -175,6 +175,7 @@ class Game
             foreach ($gameMembers as $gameMember) {
                 if($gameMember['role'] == \app\models\Game::ROLE_MAF) {
                     $result = Yii::$app->bot->inviteUserToThread($mafThreadId, $gameMember['discord_id']);
+                    sleep(3);
                 }
                 if($gameMember['role'] == \app\models\Game::ROLE_DON) {
                     $result = Yii::$app->bot->inviteUserToThread($mafThreadId, $gameMember['discord_id']);
@@ -183,6 +184,7 @@ class Game
                 }
                 if($gameMember['role'] == \app\models\Game::ROLE_SHERIFF) {
                     $result = Yii::$app->bot->inviteUserToThread($sheriffThreadId, $gameMember['discord_id']);
+                    sleep(3);
                 }
             }
 
