@@ -32,14 +32,14 @@ class Game
             //TODO вынести категорию в настройки сервера
             $categoryId = 803807947532009473;
 
-//            $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, "игра {$hostServerNick}");
+            $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, "игра {$hostServerNick}");
 
             $game = new \app\models\Game([
                 'host_id' => $hostUser->getId(),
                 'guild_id' => $guildId,
                 'status' => \app\models\Game::GAME_IN_PROCESS,
                 'start_time' => strval(time()),
-//                'channel_id' => strval($channelId)
+                'channel_id' => strval($channelId)
             ]);
             if(!$game->save()){
                 throw new \Exception('Игра не сохранена в базу!');
@@ -160,7 +160,7 @@ class Game
 
             //создаём ветки для ролей
 
-            /*$mafThreadId = Yii::$app->bot->createThread($channelId, 'мафия');
+            $mafThreadId = Yii::$app->bot->createThread($channelId, 'мафия');
             $donThreadId = Yii::$app->bot->createThread($channelId, 'дон');
             $sheriffThreadId = Yii::$app->bot->createThread($channelId, 'комиссар');
 
@@ -184,7 +184,7 @@ class Game
                 if($gameMember['role'] == \app\models\Game::ROLE_SHERIFF) {
                     $result = Yii::$app->bot->inviteUserToThread($sheriffThreadId, $gameMember['discord_id']);
                 }
-            }*/
+            }
 
 //            return [$game, $gameMembers];
             return $game;
