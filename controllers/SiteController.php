@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\DiscordUser;
 use app\models\Game;
+use app\models\GameMember;
 use app\models\Guild;
 use app\models\User;
 use Yii;
@@ -187,12 +188,18 @@ class SiteController extends Controller
             $discordUser = DiscordUser::find()->where(['discord_id' => $discordUserId])->one();
             if(!empty($discordUser)){
                 $user = User::find()->where(['id' => $discordUser->user_id])->one();
+            } else {
+                $discordUser = GameMember::find()->where(['discord_id' => $discordUserId])->one();
             }
         } else {
             $user = Yii::$app->user->getIdentity();
             $discordUser = $user->getDiscordUser()->one();
             $discordUserId = $discordUser->discord_id;
         }
+
+        $discordUserName = !empty($discordUser->username) ? $discordUser->username : $discordUser->name;
+        $discordUserAvatar = $discordUser->avatar;
+
 
         $gamesPlayed = Game::getPlayedGames($discordUserId);
         $gamesHosted = !empty($user) ? Game::getHostedGames($user->id) : [];
@@ -210,9 +217,14 @@ class SiteController extends Controller
             }
         }
 
+        $discordUserAvatar = strpos('https', $discordUserAvatar) !== null ? $discordUserAvatar : "https://cdn.discordapp.com/avatars/$discordUserId/$discordUserAvatar.jpg";
+
         return $this->render('profile', [
 //            'user' => $user,
-            'discordUser' => $discordUser,
+//            'discordUser' => $discordUser,
+            'discordUserId' => $discordUserId,
+            'discordUserName' => $discordUserName,
+            'discordUserAvatar' => $discordUserAvatar,
             'gamesPlayedCount' => $gamesPlayedCount,
             'gamesWonCount' => $gamesWonCount,
             'gamesHostedCount' => $gamesHostedCount,
