@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\DiscordUser;
 use app\models\Game;
 use app\models\Guild;
 use app\models\User;
@@ -181,25 +182,36 @@ class SiteController extends Controller
 
     public function actionProfile()
     {
-        $user = Yii::$app->user->getIdentity();
-        $discordUser = $user->getDiscordUser()->one();
+        if(!empty($_GET) && !empty($_GET['discord_id'])){
+            $discordUserId = $_GET['discord_id'];
+            $discordUser = DiscordUser::find()->where(['discord_id' => $discordUserId])->one();
+            if(!empty($discordUser)){
+                $user = User::find()->where(['id' => $discordUser->user_id])->one();
+            }
+        } else {
+            $user = Yii::$app->user->getIdentity();
+            $discordUser = $user->getDiscordUser()->one();
+            $discordUserId = $discordUser->discord_id;
+        }
 
-        $gamesPlayed = Game::getPlayedGames($discordUser->discord_id);
-        $gamesHosted = Game::getHostedGames($user->id);
+        $gamesPlayed = Game::getPlayedGames($discordUserId);
+        $gamesHosted = !empty($user) ? Game::getHostedGames($user->id) : [];
 
         $gamesPlayedCount = count($gamesPlayed);
         $gamesHostedCount = count($gamesHosted);
 
         $gamesWonCount = 0;
-        foreach ($gamesPlayed as $gamePlayed) {
-            $memberRole = in_array($gamePlayed['role'], [\app\models\Game::ROLE_SHERIFF, \app\models\Game::ROLE_MIR]) ? \app\models\Game::ROLE_MIR : \app\models\Game::ROLE_MAF;
-            if($memberRole == $gamePlayed['win_role']){
-                $gamesWonCount++;
+        if(!empty($gamesPlayedCount)) {
+            foreach ($gamesPlayed as $gamePlayed) {
+                $memberRole = in_array($gamePlayed['role'], [\app\models\Game::ROLE_SHERIFF, \app\models\Game::ROLE_MIR]) ? \app\models\Game::ROLE_MIR : \app\models\Game::ROLE_MAF;
+                if($memberRole == $gamePlayed['win_role']){
+                    $gamesWonCount++;
+                }
             }
         }
 
         return $this->render('profile', [
-            'user' => $user,
+//            'user' => $user,
             'discordUser' => $discordUser,
             'gamesPlayedCount' => $gamesPlayedCount,
             'gamesWonCount' => $gamesWonCount,
