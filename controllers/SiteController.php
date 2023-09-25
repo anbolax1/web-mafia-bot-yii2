@@ -217,7 +217,7 @@ class SiteController extends Controller
             }
         }
 
-        $discordUserAvatar = strpos('https', $discordUserAvatar) !== false ? $discordUserAvatar : "https://cdn.discordapp.com/avatars/$discordUserId/$discordUserAvatar.jpg";
+        $discordUserAvatar = strpos($discordUserAvatar, 'https') === false ? "https://cdn.discordapp.com/avatars/$discordUserId/$discordUserAvatar.jpg" : $discordUserAvatar;
 
         return $this->render('profile', [
 //            'user' => $user,
