@@ -258,6 +258,28 @@ class Game extends \yii\db\ActiveRecord
         return $this->hasMany(MemberRatingHistory::class, ['game_id' => 'id']);
     }
 
+    public static function getPlayedGames($discordUserId)
+    {
+        $games = self::find()
+            ->select(['game.*', 'game_member.*'])
+            ->leftJoin('game_member', '`game`.`id` = `game_member`.`game_id`')
+            ->where(['game_member.discord_id' => $discordUserId])
+            ->andWhere(['game.status' => Game::GAME_FINISHED])
+            ->asArray()->all();
+
+        return $games;
+    }
+
+    public static function getHostedGames($userId)
+    {
+        $games = self::find()
+            ->where(['=', 'host_id', $userId])
+            ->andWhere(['game.status' => Game::GAME_FINISHED])
+            ->asArray()->all();
+
+        return $games;
+    }
+
     public static function sortField($params = null): array
     {
         return [

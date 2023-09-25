@@ -181,6 +181,29 @@ class SiteController extends Controller
 
     public function actionProfile()
     {
-        return $this->render('profile');
+        $user = Yii::$app->user->getIdentity();
+        $discordUser = $user->getDiscordUser()->one();
+
+        $gamesPlayed = Game::getPlayedGames($discordUser->discord_id);
+        $gamesHosted = Game::getHostedGames($user->id);
+
+        $gamesPlayedCount = count($gamesPlayed);
+        $gamesHostedCount = count($gamesHosted);
+
+        $gamesWonCount = 0;
+        foreach ($gamesPlayed as $gamePlayed) {
+            $memberRole = in_array($gamePlayed['role'], [\app\models\Game::ROLE_SHERIFF, \app\models\Game::ROLE_MIR]) ? \app\models\Game::ROLE_MIR : \app\models\Game::ROLE_MAF;
+            if($memberRole == $gamePlayed['win_role']){
+                $gamesWonCount++;
+            }
+        }
+
+        return $this->render('profile', [
+            'user' => $user,
+            'discordUser' => $discordUser,
+            'gamesPlayedCount' => $gamesPlayedCount,
+            'gamesWonCount' => $gamesWonCount,
+            'gamesHostedCount' => $gamesHostedCount,
+        ]);
     }
 }

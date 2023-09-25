@@ -372,4 +372,32 @@ class DiscordBot
             throw new \Exception($e->getMessage());
         }
     }
+
+    //todo это не работает
+    public function kickMember($userId)
+    {
+        $token = env('BOT_TOKEN');
+        $guildId = 803807947066703883;
+        $voiceChannelId = 1106277407792566382;
+
+        $client = new Client([
+             'base_uri' => 'https://discord.com/api/v9/',
+             'headers' => [
+                 'Authorization' => 'Bot ' . $token,
+                 'Content-Type' => 'application/json'
+             ]
+         ]);
+
+        $response = $client->request('DELETE', "guilds/{$guildId}/voice-states/{$userId}", [
+            'json' => [
+                'channel_id' => $voiceChannelId
+            ]
+        ]);
+
+        if ($response->getStatusCode() === 204) {
+            echo "Member kicked from the voice channel successfully.";
+        } else {
+            echo "Failed to kick member from the voice channel.";
+        }
+    }
 }
