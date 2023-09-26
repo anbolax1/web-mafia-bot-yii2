@@ -21,7 +21,7 @@ class BotController extends Controller
     public function actionSaveChannelMembers()
     {
         $meta = Meta::find()->where(['key' => Meta::IS_UPDATE_CHANNEL_MEMBERS])->one();
-        if(time() - intval($meta->timestamp) > 60) {
+        if(time() - intval($meta->timestamp) > 30) {
             exit();
         }
         $token = env('BOT_TOKEN');
