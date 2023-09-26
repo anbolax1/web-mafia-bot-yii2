@@ -82,7 +82,7 @@ $hostAvatar = $host->avatar;
         <div class="modal-content" style="height: 80vh !important;">
             <div class="modal-body">
                 <p style="color: whitesmoke;font-size: 1.5em;text-align: center;font-weight: bold;">Сыграно игр за последние 24 часа</p>
-                <div id="prioritiesBlock" style="overflow: auto;"></div>
+                <div id="prioritiesBlock" style="overflow: auto;height: 80%;"></div>
             </div>
         </div>
     </div>
