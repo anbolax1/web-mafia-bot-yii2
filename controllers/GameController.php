@@ -294,7 +294,7 @@ class GameController extends Controller
 
             $startWith = time() - 86400;
             foreach ($members as &$member) {
-                $member['games_played_count'] = count(Game::getPlayedGames($member['265322977732722688'], ['start_with' => $startWith]));
+                $member['games_played_count'] = count(Game::getPlayedGames($member['discord_id'], ['start_with' => $startWith]));
             }
 
             usort($members, function ($a, $b) {
