@@ -80,7 +80,7 @@ $hostAvatar = $host->avatar;
 <div class="modal fade" id="prioritiesModal" tabindex="-1" aria-labelledby="prioritiesModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="height: 80vh !important;">
-            <div class="modal-body">
+            <div class="modal-body" style="height: 85%;">
                 <p style="color: whitesmoke;font-size: 1.5em;text-align: center;font-weight: bold;">Сыграно игр за последние 24 часа</p>
                 <div id="prioritiesBlock" style="overflow: auto;height: 80%;"></div>
             </div>
