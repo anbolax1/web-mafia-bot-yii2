@@ -260,6 +260,9 @@ class Game extends \yii\db\ActiveRecord
 
     public static function getPlayedGames($discordUserId, $params = [])
     {
+        if(empty($params['start_with'])){
+            $params['start_with'] = 0;
+        }
         $games = self::find()
             ->select(['game.*', 'game_member.*'])
             ->leftJoin('game_member', '`game`.`id` = `game_member`.`game_id`')
