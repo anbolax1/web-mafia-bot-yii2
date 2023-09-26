@@ -77,11 +77,12 @@ $hostAvatar = $host->avatar;
     </div>
 </div>
 
-<div class="modal fade modal-sm" id="prioritiesModal" tabindex="-1" aria-labelledby="prioritiesModal" aria-hidden="true">
+<div class="modal fade" id="prioritiesModal" tabindex="-1" aria-labelledby="prioritiesModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content" style="height: 80vh !important;">
             <div class="modal-body">
-
+                <p style="color: whitesmoke;font-size: 1.5em;text-align: center;font-weight: bold;">Сыграно игр за последние 24 часа</p>
+                <div id="prioritiesBlock" style="overflow: auto;"></div>
             </div>
         </div>
     </div>

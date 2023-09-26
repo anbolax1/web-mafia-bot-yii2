@@ -440,6 +440,36 @@ $( document ).ready(function() {
     })
 
     $(document).on("click", "#showPrioritiesButton", function (e){
+        let members = $("li.member");
+
+        let membersArray = [];
+
+        $(members).each(function (index){
+            let discord_id = $(this).find($("p#member")).attr('discord_id');
+            let avatar = $(this).find($("img.avatar")).attr('src');
+            let name = $(this).find($('span#name')).text();
+            membersArray[index] = {discord_id: discord_id, name: name, avatar: avatar};
+        });
+
+        jQuery.ajax({
+            url: 'get-priorities',
+            method: 'get',
+            data: {
+                members:Object.assign(membersArray),
+            },
+            success: function(response) {
+                var result = JSON.parse(response);
+
+                if(typeof result['message'] != 'undefined'){
+                    alert(result['message']);
+                }
+                showPriorities(result);
+
+                let modal = $("#prioritiesModal");
+                modal.modal('show');
+            }
+        });
+
         //TODO показывать приоритеты
         let modal = $("#prioritiesModal");
         modal.modal('show');
@@ -463,6 +493,12 @@ $( document ).ready(function() {
             $(e.currentTarget).css('color', 'red');
         }
     })
+
+    $(document).on("click", "p.finish-member-row, p.priorities-member", function (e){
+        let discordId = $(e.currentTarget).attr('discord_id');
+        let url = "/site/profile?discord_id="+discordId;
+        window.open(url, "_blank");
+    })
 });
 
 
@@ -479,4 +515,39 @@ function shuffleArray(array) {
     }
 
     return array;
+}
+
+function showPriorities(members)
+{
+    Object.keys(members).forEach(function (key) {
+        let span = $("<span>", {
+            'class': 'finish-member-name',
+            'discord_id' :members[key]['discord_id'],
+        });
+
+        let img = $("<img>",{
+            'src': members[key]['avatar'],
+            'alt': 'Avatar',
+            'class': 'avatar'
+        }).appendTo(span);
+
+        let nameSpan = $("<span>", {
+            'id':'name',
+            'text': members[key]['name'],
+            'style': 'color:whitesmoke;'
+        }).appendTo(span);
+
+        let countSpan = $("<span>", {
+            'text': members[key]['games_played_count'],
+            'style': 'font-weight:bold;'
+        });
+
+        let p = $("<p>", {
+            'class': 'priorities-member',
+            'discord_id': members[key]['discord_id'],
+            'style': 'display: flex;flex-wrap: nowrap;justify-content: space-around;'
+        }).append(span).append(countSpan);
+
+        p.appendTo($("div#prioritiesBlock"));
+    });
 }

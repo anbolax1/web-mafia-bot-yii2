@@ -283,6 +283,30 @@ class GameController extends Controller
         }
     }
 
+    public function actionGetPriorities()
+    {
+        try {
+            $get = $_GET;
+            if(empty($get['members'])){
+                throw new \Exception("Участники не найдены");
+            }
+            $members = $get['members'];
+
+            $startWith = time() - 86400;
+            foreach ($members as &$member) {
+                $member['games_played_count'] = count(Game::getPlayedGames($member['265322977732722688'], ['start_with' => $startWith]));
+            }
+
+            usort($members, function ($a, $b) {
+                return $a['games_played_count'] - $b['games_played_count'];
+            });
+
+            return json_encode($members, JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            return json_encode(['message' => $e->getMessage()]);
+        }
+    }
+
     public function actionTest()
     {
         try {
