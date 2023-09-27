@@ -11,9 +11,12 @@ use Yii;
  * @property string $discord_id
  * @property string|null $name
  * @property string|null $voice_channels
+ * @property string|null $status
+ * @property string|null $information
  */
 class Guild extends \yii\db\ActiveRecord
 {
+    const STATUS_DISABLED = 'disabled';
     /**
      * {@inheritdoc}
      */
@@ -29,8 +32,8 @@ class Guild extends \yii\db\ActiveRecord
     {
         return [
             [['discord_id'], 'required'],
-            [['voice_channels'], 'string'],
-            [['discord_id', 'name'], 'string', 'max' => 255],
+            [['voice_channels', 'information'], 'string'],
+            [['discord_id', 'name', 'status'], 'string', 'max' => 255],
             [['discord_id'], 'unique'],
         ];
     }

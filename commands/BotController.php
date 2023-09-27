@@ -48,6 +48,9 @@ class BotController extends Controller
                     throw new \Exception("Серверы в базе не найдены!");
                 }
                 foreach ($guilds as $guild) {
+                    if(!empty($guild->status) && $guild->status == Guild::STATUS_DISABLED){
+                        continue;
+                    }
                     $discordGuild = $discord->guilds->get('id', $guild->discord_id);
                     $voiceChannels = json_decode($guild['voice_channels'], true);
                     if(empty($voiceChannels)){
