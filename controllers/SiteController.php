@@ -211,17 +211,77 @@ class SiteController extends Controller
         $gamesHostedCount = count($gamesHosted);
 
         $gamesWonCount = 0;
+
+        $gamesGeneralMirPlayedCount = 0; //общее число игр на красном (включая шерифа)
+        $gamesGeneralMafPlayedCount = 0; //общее число игр на черном (включая дона)
+
+        $gamesGeneralMirWinCount = 0;
+        $gamesGeneralMafWinCount = 0;
+
+        $gamesMirPlayedCount = 0;
+        $gamesSheriffPlayedCount = 0;
+        $gamesMafPlayedCount = 0;
+        $gamesDonPlayedCount = 0;
+
+        $gamesWinMirCount = 0;
+        $gamesWinSheriffCount = 0;
+        $gamesWinMafCount = 0;
+        $gamesWinDonCount = 0;
+
         if(!empty($gamesPlayedCount)) {
             foreach ($gamesPlayed as $gamePlayed) {
                 $memberRole = in_array($gamePlayed['role'], [\app\models\Game::ROLE_SHERIFF, \app\models\Game::ROLE_MIR]) ? \app\models\Game::ROLE_MIR : \app\models\Game::ROLE_MAF;
                 if($memberRole == $gamePlayed['win_role']){
                     $gamesWonCount++;
                 }
+
+                switch ($gamePlayed['role']) {
+                    case Game::ROLE_MIR:
+                        $gamesMirPlayedCount++;
+                        $gamesGeneralMirPlayedCount++;
+                        break;
+                    case Game::ROLE_SHERIFF:
+                        $gamesSheriffPlayedCount++;
+                        $gamesGeneralMirPlayedCount++;
+                        break;
+                    case Game::ROLE_MAF:
+                        $gamesMafPlayedCount++;
+                        $gamesGeneralMafPlayedCount++;
+                        break;
+                    case Game::ROLE_DON:
+                        $gamesDonPlayedCount++;
+                        $gamesGeneralMafPlayedCount++;
+                        break;
+                }
+
+                if($gamePlayed['win_role'] == Game::ROLE_MIR) {
+                    switch ($gamePlayed['role']) {
+                        case Game::ROLE_MIR:
+                            $gamesWinMirCount++;
+                            $gamesGeneralMirWinCount++;
+                            break;
+                        case Game::ROLE_SHERIFF:
+                            $gamesWinSheriffCount++;
+                            $gamesGeneralMirWinCount++;
+                            break;
+                    }
+                }
+                if($gamePlayed['win_role'] == Game::ROLE_MAF) {
+                    switch ($gamePlayed['role']) {
+                        case Game::ROLE_MAF:
+                            $gamesWinMafCount++;
+                            $gamesGeneralMafWinCount++;
+                            break;
+                        case Game::ROLE_DON:
+                            $gamesWinDonCount++;
+                            $gamesGeneralMafWinCount++;
+                            break;
+                    }
+                }
             }
         }
 
         $discordUserAvatar = strpos($discordUserAvatar, 'https') === false ? "https://cdn.discordapp.com/avatars/$discordUserId/$discordUserAvatar.jpg" : $discordUserAvatar;
-
 
         //получаем рейтинг (текущий, максимальный, минимальный)
         $currentRating = 1000;
@@ -242,6 +302,18 @@ class SiteController extends Controller
             }
         }
 
+        //получаем процент побед (общий, на красном, на чёрном
+
+        $generalWinPercent = !empty($gamesPlayedCount) ? round($gamesWonCount / $gamesPlayedCount * 100, 0) : 0;
+
+        $mirWinPercent = !empty($gamesMirPlayedCount) ? round($gamesWinMirCount / $gamesMirPlayedCount * 100, 0) : 0;
+        $sheriffWinPercent = !empty($gamesSheriffPlayedCount) ? round($gamesWinSheriffCount / $gamesSheriffPlayedCount * 100, 0) : 0;
+        $mafWinPercent = !empty($gamesMafPlayedCount) ? round($gamesWinMafCount / $gamesMafPlayedCount * 100, 0) : 0;
+        $donWinPercent = !empty($gamesDonPlayedCount) ? round($gamesWinDonCount / $gamesDonPlayedCount * 100, 0) : 0;
+
+        $generalMirWinPercent = !empty($gamesGeneralMirPlayedCount) ? round($gamesGeneralMirWinCount / $gamesGeneralMirPlayedCount * 100, 0) : 0;
+        $generalMafWinPercent = !empty($gamesGeneralMafPlayedCount) ? round($gamesGeneralMafPlayedCount / $gamesGeneralMafPlayedCount * 100, 0) : 0;
+
         return $this->render('profile', [
 //            'user' => $user,
 //            'discordUser' => $discordUser,
@@ -255,7 +327,12 @@ class SiteController extends Controller
                 'current' => $currentRating,
                 'max' => $maxRating,
                 'min' => $minRating
-            ]
+            ],
+            'winPercent' => [
+                'general' => $generalWinPercent,
+                'mir' =>$generalMirWinPercent,
+                'maf' => $generalMafWinPercent
+            ],
         ]);
     }
 }

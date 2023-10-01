@@ -26,9 +26,9 @@ GameAsset::register($this);
             </div>
             <div class="col-md-4" style="height: 8em;min-width: 15em;max-width: 20%;display: flex;flex-wrap: wrap;justify-content: space-between;">
                 <p class="main-profile-stat">Процент побед</p>
-                <p class="submain-profile-stat" style="width: 90% !important;"><span>Общий:</span><span>...</span></p>
-                <p class="submain-profile-stat" style="width: 90% !important;"><span>На красном (мир, шер):</span><span>...</span></p>
-                <p class="submain-profile-stat" style="width: 90% !important;"><span>На чёрном (маф, дон):</span><span>...</span></p>
+                <p class="submain-profile-stat" style="width: 90% !important;"><span>Общий:</span><span><?=$winPercent['general'] ?></span></p>
+                <p class="submain-profile-stat" style="width: 90% !important;"><span>На красном (мир, шер):</span><span><?=$winPercent['mir'] ?></span></p>
+                <p class="submain-profile-stat" style="width: 90% !important;"><span>На чёрном (маф, дон):</span><span><?=$winPercent['maf'] ?></span></p>
             </div>
             <div class="col-md-4" style="height: 8em;min-width: 15em;max-width: 20%;display: flex;flex-wrap: wrap;justify-content: space-between;">
                 <p class="main-profile-stat">Игровой стаж</p>
