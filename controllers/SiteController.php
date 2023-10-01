@@ -312,7 +312,7 @@ class SiteController extends Controller
         $donWinPercent = !empty($gamesDonPlayedCount) ? round($gamesWinDonCount / $gamesDonPlayedCount * 100, 0) : 0;
 
         $generalMirWinPercent = !empty($gamesGeneralMirPlayedCount) ? round($gamesGeneralMirWinCount / $gamesGeneralMirPlayedCount * 100, 0) : 0;
-        $generalMafWinPercent = !empty($gamesGeneralMafPlayedCount) ? round($gamesGeneralMafPlayedCount / $gamesGeneralMafPlayedCount * 100, 0) : 0;
+        $generalMafWinPercent = !empty($gamesGeneralMafPlayedCount) ? round($gamesGeneralMafWinCount / $gamesGeneralMafPlayedCount * 100, 0) : 0;
 
         return $this->render('profile', [
 //            'user' => $user,
