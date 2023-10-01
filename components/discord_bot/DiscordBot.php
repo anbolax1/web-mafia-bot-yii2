@@ -400,4 +400,30 @@ class DiscordBot
             echo "Failed to kick member from the voice channel.";
         }
     }
+
+    public function banMember($guildId, $discordId, $reason = '')
+    {
+        $token = env('BOT_TOKEN');
+
+        $client = new Client([
+             'base_uri' => 'https://discord.com/api/v9/',
+             'headers' => [
+                 'Authorization' => 'Bot ' . $token,
+                 'Content-Type' => 'application/json',
+             ],
+         ]);
+
+        $response = $client->put("guilds/{$guildId}/bans/{$discordId}", [
+            'json' => [
+                'delete_message_days' => 0, // Number of days to delete messages (0-7)
+                'reason' => $reason,
+            ],
+        ]);
+
+        if ($response->getStatusCode() === 204) {
+            echo "User banned successfully!";
+        } else {
+            echo "Failed to ban user.";
+        }
+    }
 }

@@ -15,6 +15,8 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
+use Discord\WebSockets\Event;
+use React\Http\Browser;
 
 class BotController extends Controller
 {
@@ -162,5 +164,28 @@ class BotController extends Controller
             echo $e->getMessage();
             return ExitCode::OK;
         }
+    }*/
+
+    /*public function actionTest()
+    {
+        $token = env('BOT_TOKEN');
+        $discord = new Discord(
+            [
+                'token' => $token
+            ]
+        );
+        $discord->on('ready', function (Discord $discord) {
+
+            $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) {
+                if ($message->author->bot) {
+                    return;
+                }
+
+                $message->reply("test");
+            });
+
+        });
+
+        $discord->run();
     }*/
 }
