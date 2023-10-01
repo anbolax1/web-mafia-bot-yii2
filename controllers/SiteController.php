@@ -6,6 +6,8 @@ use app\models\DiscordUser;
 use app\models\Game;
 use app\models\GameMember;
 use app\models\Guild;
+use app\models\MemberRating;
+use app\models\MemberRatingHistory;
 use app\models\User;
 use Yii;
 use yii\base\BaseObject;
@@ -220,6 +222,26 @@ class SiteController extends Controller
 
         $discordUserAvatar = strpos($discordUserAvatar, 'https') === false ? "https://cdn.discordapp.com/avatars/$discordUserId/$discordUserAvatar.jpg" : $discordUserAvatar;
 
+
+        //получаем рейтинг (текущий, максимальный, минимальный)
+        $currentRating = 1000;
+        $maxRating = 1000;
+        $minRating = 1000;
+
+        $memberRatingHistory = MemberRatingHistory::find()->where(['discord_id' => $discordUserId, 'type' => MemberRating::RATING_GENERAL])->all();
+
+        if(!empty($memberRatingHistory)){
+            foreach ($memberRatingHistory as $memberRatingHistoryItem) {
+                $currentRating = $currentRating + intval($memberRatingHistoryItem->change_rating);
+                if($currentRating > $maxRating) {
+                     $maxRating = $currentRating;
+                }
+                if($currentRating < $minRating) {
+                    $minRating = $currentRating;
+                }
+            }
+        }
+
         return $this->render('profile', [
 //            'user' => $user,
 //            'discordUser' => $discordUser,
@@ -229,6 +251,11 @@ class SiteController extends Controller
             'gamesPlayedCount' => $gamesPlayedCount,
             'gamesWonCount' => $gamesWonCount,
             'gamesHostedCount' => $gamesHostedCount,
+            'rating' => [
+                'current' => $currentRating,
+                'max' => $maxRating,
+                'min' => $minRating
+            ]
         ]);
     }
 }

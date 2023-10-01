@@ -42,3 +42,36 @@ h1.grid-title, h1.user-name {
     color: whitesmoke;
     text-shadow:5px 0px 5px #000000, 0px 3px 5px #000000;
 }
+
+/* Profile styles */
+p.main-profile-stat {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width:100%;
+    margin:0;
+    font-size: 1.7em;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+p.submain-profile-stat {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width:100%;
+    color: whitesmoke;
+    margin: 0;
+}
+
+.custom-row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: calc(-0.5 * var(--bs-gutter-x));
+    margin-left: calc(-0.5 * var(--bs-gutter-x));
+    justify-content: center;
+}
+
+/*______________*/
