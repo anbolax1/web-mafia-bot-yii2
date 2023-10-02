@@ -228,6 +228,10 @@ class SiteController extends Controller
         $gamesWinMafCount = 0;
         $gamesWinDonCount = 0;
 
+        $playedDays = [];
+        $firstGameDate = '';
+        $lastGameDate = '';
+
         if(!empty($gamesPlayedCount)) {
             foreach ($gamesPlayed as $gamePlayed) {
                 $memberRole = in_array($gamePlayed['role'], [\app\models\Game::ROLE_SHERIFF, \app\models\Game::ROLE_MIR]) ? \app\models\Game::ROLE_MIR : \app\models\Game::ROLE_MAF;
@@ -278,6 +282,16 @@ class SiteController extends Controller
                             break;
                     }
                 }
+
+                $gameStartDate = gmdate("d.m.Y", $gamePlayed['start_time']);
+                if(empty($firstGameDate)){
+                    $firstGameDate = $gameStartDate;
+                }
+                $lastGameDate = $gameStartDate;
+
+                if(!in_array($gameStartDate, $playedDays)){
+                    $playedDays[] = $gameStartDate;
+                }
             }
         }
 
@@ -314,6 +328,8 @@ class SiteController extends Controller
         $generalMirWinPercent = !empty($gamesGeneralMirPlayedCount) ? round($gamesGeneralMirWinCount / $gamesGeneralMirPlayedCount * 100, 0) : 0;
         $generalMafWinPercent = !empty($gamesGeneralMafPlayedCount) ? round($gamesGeneralMafWinCount / $gamesGeneralMafPlayedCount * 100, 0) : 0;
 
+        //получаем игровой стаж (игровых дней, дата первой игры, дата последней игры)
+
         return $this->render('profile', [
 //            'user' => $user,
 //            'discordUser' => $discordUser,
@@ -333,6 +349,11 @@ class SiteController extends Controller
                 'mir' =>$generalMirWinPercent,
                 'maf' => $generalMafWinPercent
             ],
+            'gameExperience' => [
+                'playedDays' => count($playedDays),
+                'firstGameDate' => $firstGameDate,
+                'lastGameDate' => $lastGameDate,
+            ]
         ]);
     }
 }

@@ -32,12 +32,16 @@ GameAsset::register($this);
             </div>
             <div class="col-md-4" style="height: 8em;min-width: 15em;max-width: 20%;display: flex;flex-wrap: wrap;justify-content: space-between;">
                 <p class="main-profile-stat">Игровой стаж</p>
-                <p class="submain-profile-stat" style="width: 90% !important;"><span>Игровых дней:</span><span>...</span></p>
-                <p class="submain-profile-stat" style="width: 90% !important;"><span>Дата первой игры:</span><span>...</span></p>
-                <p class="submain-profile-stat" style="width: 90% !important;"><span>Дата последней игры:</span><span>...</span></p>
+                <p class="submain-profile-stat" style="width: 100% !important;"><span>Игровых дней:</span><span><?=$gameExperience['playedDays'] ?></span></p>
+                <p class="submain-profile-stat" style="width: 100% !important;"><span>Первая игра:</span><span><?=$gameExperience['firstGameDate'] ?></span></p>
+                <p class="submain-profile-stat" style="width: 100% !important;"><span>Последняя игра:</span><span><?=$gameExperience['lastGameDate'] ?></span></p>
             </div>
         </div>
 
     </div>
+    <div class="row" style="width:100%; background-color: rgba(96, 96, 112, 0.85); border-radius: 15px; justify-content: center !important;">
+
+    </div>
+
 </div>
 
