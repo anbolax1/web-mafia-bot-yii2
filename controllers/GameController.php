@@ -124,7 +124,7 @@ class GameController extends Controller
 //        return $this->redirect(["starting", 'id' => $payroll_model->id]);
         } catch (\Exception $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
-            return $this->render('index');
+            return $this->render('/site/index');
         }
     }
 
