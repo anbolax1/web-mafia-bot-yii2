@@ -128,7 +128,7 @@ class SiteController extends Controller
 
     public function actionLoginAsUser()
     {
-        if (!Yii::$app->user->isAdmin()) {
+        if (!Yii::$app->user->getIdentity()->isAdmin()) {
             return $this->goHome();
         }
         $userId = $_GET['id'];
@@ -139,7 +139,10 @@ class SiteController extends Controller
 
         Yii::$app->user->login($user, 3600*24*30);
 
-        return $this->render('index');
+        $gameModel = new Game();
+        $dataProvider = $gameModel->getGames(Yii::$app->request->queryParams);
+        $games = Game::find()->where(['<>', 'status', Game::GAME_CANCELED]);
+        return $this->render('index', ['dataProvider' => $dataProvider]);
     }
 
     /**
