@@ -106,7 +106,7 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        if (Yii::$app->user->getIdentity()->isAdmin()) {
+        if (!Yii::$app->user->getIdentity()->isAdmin()) {
             throw new \Exception("Ты не админ!");
         }
         $model = $this->findModel($id);
