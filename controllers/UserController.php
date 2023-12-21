@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\User;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -105,6 +106,9 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (Yii::$app->user->getIdentity()->isAdmin()) {
+            throw new \Exception("Ты не админ!");
+        }
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
