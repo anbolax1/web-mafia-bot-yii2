@@ -24,7 +24,8 @@ class DiscordUser
                 'client_secret' => env('DISCORD_CLIENT_SECRET'),
                 'grant_type' => 'authorization_code',
                 'redirect_uri' => env('DISCORD_REDIRECT_URI'),
-                'scope' => 'identify%20guilds%20guilds.join%20guilds.members.read',
+//                'scope' => 'identify%20guilds%20guilds.join%20guilds.members.read',
+                'scope' => 'identify%20guilds%20guilds.members.read',
             ];
 
             $payloadString = http_build_query($payload);
