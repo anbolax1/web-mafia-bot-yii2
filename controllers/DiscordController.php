@@ -35,7 +35,7 @@ class DiscordController extends \yii\web\Controller
 
             Yii::$app->user->login($user, 3600*24*30);
 
-            return $this->redirect('index');
+            return $this->redirect('/site/index');
 
 
             /*session_start();
