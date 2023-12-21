@@ -45,8 +45,14 @@ $this->title = 'Пользователи';
                                 'class'=>'button btn btn-default',
                             ]
                         );
-                }
-                ]
+                    }
+                ],
+                'visibleButtons' =>
+                    [
+                        'myButton' => Yii::$app->user->getIdentity()->isAdmin(),
+                        'delete' => Yii::$app->user->can('updatePost')
+                    ]
+
             ]
         ],
          'rowOptions'   => function ($model, $key, $index, $grid) {
