@@ -30,7 +30,7 @@ class Game
 
             //создаём текстовый канал игры
             //TODO вынести категорию в настройки сервера
-            $categoryId = 803807947532009473;
+            $categoryId = 1054490212757164172;
 
             $channelId = Yii::$app->bot->createTextChannel($guildId, $categoryId, "игра {$hostServerNick}");
 
