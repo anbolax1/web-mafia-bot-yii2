@@ -128,6 +128,9 @@ class SiteController extends Controller
 
     public function actionLoginAsUser()
     {
+        if (!Yii::$app->user->isAdmin()) {
+            return $this->goHome();
+        }
         $userId = $_GET['id'];
         /**
          * @var $user User
