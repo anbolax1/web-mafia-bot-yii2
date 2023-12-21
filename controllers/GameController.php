@@ -265,6 +265,15 @@ class GameController extends Controller
                     Yii::$app->bot->deleteChannel($channelId);
                 }
                 $game->updateAttributes(['status' => Game::GAME_CANCELED]);
+
+                //возвращаем ники участникам
+                $gameMembers = GameMember::find()->where(['game_id' => $game->id])->all();
+                foreach ($gameMembers as $gameMember) {
+                    try {
+                        Yii::$app->bot->changeUserNick($game->guild_id, $gameMember->discord_id, $gameMember->name, '');
+                    } catch (\Exception $e) {}
+                }
+
                 return $this->render('starting');
             } else {
                 $result = Yii::$app->Game->finishGame($game, $post);
