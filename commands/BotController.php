@@ -69,10 +69,11 @@ class BotController extends Controller
                             ]);
                             $voiceChannelModel->save();
                             foreach ($members as $memberDiscordId => $member) {
-//                                file_put_contents('members.log', print_r(json_encode($member->member->nick, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
-                                $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->nick);
+//                                $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->nick);
+                                $name = $member->member->nick;
                                 if(empty($name)){
-                                    $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->user->username);
+//                                    $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->user->username);
+                                    $name = $member->member->user->username;
                                 }
 
                                 if(strlen($name) > 3) {
