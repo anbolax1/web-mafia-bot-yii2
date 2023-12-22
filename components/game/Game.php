@@ -215,7 +215,9 @@ class Game
 
             $channelId = $game->channel_id;
             if(!empty($channelId)){
-                Yii::$app->bot->deleteChannel($channelId);
+                try {
+                    Yii::$app->bot->deleteChannel($channelId);
+                } catch (\Exception $e) {}
             }
 
             $gameSettings = Yii::$app->Game->getGameSettings($game);
