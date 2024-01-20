@@ -100,7 +100,7 @@ class GameController extends Controller
             }
 
             $hostUser = Yii::$app->user->getIdentity();
-            if(!$hostUser->isHost()){
+            if(!$hostUser->isHost() && !$hostUser->isAdmin()){
                 throw new \Exception("Ты не ведущий!");
             }
             $hostDiscordId = $hostUser->discordId;
