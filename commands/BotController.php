@@ -50,54 +50,59 @@ class BotController extends Controller
                     throw new \Exception("Серверы в базе не найдены!");
                 }
                 foreach ($guilds as $guild) {
-                    if(!empty($guild->status) && $guild->status == Guild::STATUS_DISABLED){
-                        continue;
-                    }
-                    $discordGuild = $discord->guilds->get('id', $guild->discord_id);
-                    $voiceChannels = json_decode($guild['voice_channels'], true);
-                    if(empty($voiceChannels)){
-                        $isError = true;
-                        throw new \Exception("Голосовые каналы в базе не найдены!");
-                    }
-                    foreach ($voiceChannels as $voiceChannelId){
-                        $discordChannel = $discordGuild->channels->get('id', $voiceChannelId);
-                        $members = $discordChannel->members;
-                        if(!empty($members)){
-                            $voiceChannelModel = new VoiceChannel([
-                               'discord_id' => strval($voiceChannelId),
-                               'guild_id' => $guild->id
-                            ]);
-                            $voiceChannelModel->save();
-                            foreach ($members as $memberDiscordId => $member) {
+                    try {
+                        if(!empty($guild->status) && $guild->status == Guild::STATUS_DISABLED){
+                            continue;
+                        }
+                        $discordGuild = $discord->guilds->get('id', $guild->discord_id);
+                        $voiceChannels = json_decode($guild['voice_channels'], true);
+                        if(empty($voiceChannels)){
+                            $isError = true;
+                            throw new \Exception("Голосовые каналы в базе не найдены!");
+                        }
+                        foreach ($voiceChannels as $voiceChannelId){
+                            $discordChannel = $discordGuild->channels->get('id', $voiceChannelId);
+                            $members = $discordChannel->members;
+                            if(!empty($members)){
+                                $voiceChannelModel = new VoiceChannel([
+                                                                          'discord_id' => strval($voiceChannelId),
+                                                                          'guild_id' => $guild->id
+                                                                      ]);
+                                $voiceChannelModel->save();
+                                foreach ($members as $memberDiscordId => $member) {
 //                                $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->nick);
-                                $name = $member->member->nick;
-                                if(empty($name)){
+                                    $name = $member->member->nick;
+                                    if(empty($name)){
 //                                    $name = preg_replace('/[^a-zA-Zа-яА-Я0-9\s\p{P}]+/u', '', $member->member->user->username);
-                                    $name = $member->member->user->username;
-                                }
-
-                                if(strlen($name) > 3) {
-                                    if($name[2] == '.'){
-                                        $name = trim(substr($name, 3));
+                                        $name = $member->member->user->username;
                                     }
-                                }
 
-                                $name = str_replace("!Вед.", '', $name);
-                                $name = str_replace("Зр.", '', $name);
-                                $name = trim($name);
+                                    if(strlen($name) > 3) {
+                                        if($name[2] == '.'){
+                                            $name = trim(substr($name, 3));
+                                        }
+                                    }
+
+                                    $name = str_replace("!Вед.", '', $name);
+                                    $name = str_replace("Зр.", '', $name);
+                                    $name = trim($name);
 
 //                                file_put_contents('members.log', print_r(json_encode($name, JSON_UNESCAPED_UNICODE) . PHP_EOL, true), FILE_APPEND);
-                                $channelMemberModel = new ChannelMember([
-                                    'discord_id' => strval($member->member->user->id),
-                                    'name' => $name,
-                                    'avatar' => $member->member->user->avatar,
-                                    'self_video' => $member->self_video ? 'true' : 'false',
-                                    'channel_id' => $voiceChannelModel->id
-                                ]);
-                                unset($name);
-                                $channelMemberModel->save();
+                                    $channelMemberModel = new ChannelMember([
+                                                                                'discord_id' => strval($member->member->user->id),
+                                                                                'name' => $name,
+                                                                                'avatar' => $member->member->user->avatar,
+                                                                                'self_video' => $member->self_video ? 'true' : 'false',
+                                                                                'channel_id' => $voiceChannelModel->id
+                                                                            ]);
+                                    unset($name);
+                                    $channelMemberModel->save();
+                                }
                             }
                         }
+                    } catch (\Exception $e) {
+                        echo $e->getMessage();
+                        continue;
                     }
                 }
                 if(!$isError){
