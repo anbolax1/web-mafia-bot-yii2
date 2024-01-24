@@ -105,6 +105,7 @@ class BotController extends Controller
                 }
             } catch (\Exception $e) {
                 echo $e->getMessage();
+                $discord->close();
                 return ExitCode::OK;
             }
         });
