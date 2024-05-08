@@ -70,7 +70,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-//        $result = Yii::$app->bot->banMember(1205059016510930944, 563761133618593852);
+        $result = Yii::$app->bot->banMember(1205059016510930944, 563761133618593852);
         /*$guildId = 803807947066703883;
         $categoryId = 803807947532009473;
 
